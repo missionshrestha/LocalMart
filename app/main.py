@@ -1,4 +1,3 @@
-from operator import ge
 from fastapi import FastAPI
 from .database import get_db
 
