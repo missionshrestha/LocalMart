@@ -3,6 +3,7 @@ from .routers import test
 
 app = FastAPI()
 
+
 @app.get("/")
 def get_root():
     return {"msg": "Namaste"}

@@ -18,4 +18,5 @@ def get_test(db: Session = Depends(get_db)):
         )
     return paginate(q)
 
+
 add_pagination(router)
