@@ -1,4 +1,4 @@
-from sqlalchemy.sql.sqltypes import Integer, String
+from sqlalchemy.sql.sqltypes import Integer, VARCHAR
 from .database import Base
 from sqlalchemy import Column
 
@@ -6,4 +6,4 @@ from sqlalchemy import Column
 class Test(Base):
     __tablename__ = "test"
     column1 = Column(Integer, primary_key=True)
-    column2 = Column(String)
+    column2 = Column(VARCHAR(10))

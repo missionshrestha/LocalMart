@@ -16,6 +16,7 @@ Base = declarative_base()
 # Dependency
 def get_db():
     db = SessionLocal()
+    Base.metadata.create_all(engine)
     try:
         yield db
     finally:
