@@ -15,14 +15,14 @@ products to reach the market. Thus we prefer to carry out this project to provid
 for local Nepalese sellers to promote their products to national and worldwide markets.
 
 
-## Run Locally (Development Environment) ⚒️
+## Run Locally (Backend Development Environment) ⚒️
 
 #### You can run the application through `Uvicorn`
 
 ```bash
 # Clone the repository
 $ git clone https://github.com/ashutoshbr/LocalMart
-$ cd LocalMart
+$ cd LocalMart/backend
 
 # Setup virtual environment
 $ python -m venv venv
