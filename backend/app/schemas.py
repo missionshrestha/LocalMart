@@ -1,4 +1,5 @@
 from datetime import datetime
+from tkinter.messagebox import NO
 from pydantic import BaseModel, EmailStr
 
 
@@ -48,3 +49,11 @@ class UserOut(BaseModel):
 
     class Config:
         orm_mode = True
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
+class TokenData(BaseModel):
+    id: str | None

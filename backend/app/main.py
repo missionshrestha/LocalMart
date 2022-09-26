@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from .routers import test, user, product
+from .routers import test, user, auth, product
 
 app = FastAPI()
 
@@ -11,4 +11,5 @@ def get_root():
 
 app.include_router(test.router)
 app.include_router(user.router)
+app.include_router(auth.router)
 app.include_router(product.router)
