@@ -24,7 +24,7 @@ def get_test(new_product: schemas.ProductPost, db: Session = Depends(get_db)):
     new_product = models.Product(**new_product.dict())
     db.add(new_product)
     db.commit()
-    return f"Product added!"
+    return "Product added!"
 
 
 add_pagination(router)

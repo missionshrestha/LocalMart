@@ -18,3 +18,12 @@ class Product(Base):
     created_at = Column(DateTime, server_default=func.now())
     updated_at = Column(DateTime, onupdate=func.now())
     price = Column(FLOAT, nullable=False)
+
+
+class User(Base):
+    __tablename__ = "users"
+    id = Column(Integer, primary_key=True, nullable=False)
+    email = Column(VARCHAR(50), nullable=False, unique=True)
+    password = Column(Text, nullable=False)
+    created_at = Column(DateTime, server_default=func.now())
+    phone_number = Column(VARCHAR(15))
