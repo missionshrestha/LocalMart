@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, status, HTTPException
 from ..database import get_db
-from .. import schemas, models
+from .. import schemas, models, oauth2
 from sqlalchemy.orm import Session
 from fastapi_pagination import Page, paginate, add_pagination
 
@@ -20,7 +20,8 @@ def get_test(db: Session = Depends(get_db)):
 
 
 @router.post("/")
-def get_test(new_product: schemas.ProductPost, db: Session = Depends(get_db)):
+def get_test(new_product: schemas.ProductPost, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user),):
+    print(current_user)
     new_product = models.Product(**new_product.dict())
     db.add(new_product)
     db.commit()
