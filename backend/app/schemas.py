@@ -3,14 +3,6 @@ from tkinter.messagebox import NO
 from pydantic import BaseModel, EmailStr
 
 
-class Test(BaseModel):
-    column1: int
-    column2: str
-
-    class Config:
-        orm_mode = True
-
-
 class ProductGet(BaseModel):
     id: int
     title: str
@@ -49,6 +41,7 @@ class UserOut(BaseModel):
 
     class Config:
         orm_mode = True
+
 
 class Token(BaseModel):
     access_token: str
