@@ -1,7 +1,7 @@
 from sqlalchemy.sql.sqltypes import Integer, VARCHAR, Text, DateTime, FLOAT
 from sqlalchemy.sql import func
 from .database import Base
-from sqlalchemy import Column
+from sqlalchemy import Column, ForeignKey
 
 
 class Product(Base):
@@ -12,6 +12,7 @@ class Product(Base):
     created_at = Column(DateTime, server_default=func.now())
     updated_at = Column(DateTime, onupdate=func.now())
     price = Column(FLOAT, nullable=False)
+    created_by = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
 
 
 class User(Base):
