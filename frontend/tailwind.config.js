@@ -17,6 +17,7 @@ module.exports = {
         'mart-black-3': '#2A2D3A',
         'mart-black-4': '#24252D',
         'mart-red-violet': '#DA18A3',
+        'logo-green': '#00CC96',
         'file-active': '#2196f3',
         'file-accept': '#00e676',
         'file-reject': '#ff1744',
@@ -66,7 +67,7 @@ module.exports = {
       minlg: '2100px',
     },
     fontFamily: {
-      poppins: ['Poppins', 'sans-serif'],
+      montserrat: ['Montserrat', 'sans-serif'],
     },
   },
   variants: {
