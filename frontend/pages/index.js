@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import React from 'react';
+import { Banner } from '../components';
 
 const Home = () => (
   <div>
@@ -9,7 +10,11 @@ const Home = () => (
       <link rel="icon" href="/favicon.ico" />
     </Head>
 
-    <h1 className="text-3xl text-dark-50 underline font-bold">Hello world</h1>
+    <div className="flex justify-center sm:px-4 p-12 pt-16">
+      <div className="w-full minmd:w-4/5">
+        <Banner childStyles="md:text-4xl sm:text-2xl xs:text-xl text-left" subtitle="- Local Marts Products" buttonLink="/products" name="We Offer the Best Products for everyone." parentStyles="justify-start mt-6 mb-6 h-72 sm:h-60 p-12 xs:p-4 xs:h-44 rounded-3xl" />
+      </div>
+    </div>
   </div>
 );
 
