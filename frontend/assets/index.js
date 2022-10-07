@@ -4,5 +4,7 @@ import cross from './cross.svg';
 import menu from './menu.svg';
 import profile from './profile.svg';
 import cart from './cart.svg';
+import leftArrow from './leftArrow.png';
+import rightArrow from './rightArrow.png';
 
-export default { logo, logoDark, cross, menu, cart, profile };
+export default { logo, logoDark, cross, menu, cart, profile, leftArrow, rightArrow };
