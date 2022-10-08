@@ -40,7 +40,7 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="flex justify-between w-full fixed z-10 py-4 px-10 flex-row border-b dark:bg-mart-dark bg-white dark:border-mart-dark-1 border-mart-gray-1">
+    <nav className="flex justify-between w-full fixed z-20 py-4 px-10 flex-row border-b dark:bg-mart-dark bg-white dark:border-mart-dark-1 border-mart-gray-1">
 
       <div className="hidden md:flex ml-2">
         {isOpen ? (<Image src={images.cross} objectFit="contain" width={35} height={35} alt="menu" onClick={() => { setIsOpen(false); }} className={theme === 'dark' && 'filter invert'} />) : (
