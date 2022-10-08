@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useTheme } from 'next-themes';
 import { Banner, Category, ProductCard } from '../components';
 import images from '../assets';
+import Button from '../components/Button';
 
 const Home = () => {
   const [hideButtons, setHideButtons] = useState(false);
@@ -51,7 +52,7 @@ const Home = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className="flex flex-col justify-center sm:px-4 p-12 pt-16">
+      <div className="flex flex-col justify-end sm:px-4 p-12 pt-16">
         <div className="w-full minmd:w-4/5">
           <Banner childStyles="md:text-4xl sm:text-2xl xs:text-xl text-left" subtitle="- Local Marts Products" buttonLink="/products" name="We Offer the Best Products for everyone." parentStyles="justify-start mt-6 mb-6 h-72 sm:h-60 p-12 xs:p-4 xs:h-44 rounded-3xl" />
         </div>
@@ -90,7 +91,10 @@ const Home = () => {
               <p className="text-subtitle-blue italic font-semibold text-base md:mb-4 sm:mb-1 ml-4 xs:ml-0">- Our Products</p>
               <h1 className="font-montserrat dark:text-white text-mart-black-1 text-3xl minlg:text-4xl xs:text-xl font-bold ml-4 xs:ml-0">Explore our Products</h1>
             </div>
-            <div>SearchBar</div>
+            <div className="flex gap-2">
+              <Image onClick={() => { }} src={images.leftArrow} width={32} objectFit="contain" alt="left-arrow" className={`cursor-pointer hover:scale-105 ${theme === 'dark' && 'filter invert'}`} />
+              <Image onClick={() => { }} src={images.rightArrow} width={32} objectFit="contain" alt="left-arrow" className={`cursor-pointer hover:scale-105 ${theme === 'dark' && 'filter invert'}`} />
+            </div>
           </div>
           <div className="mt-3 w-full flex flex-wrap justify-start md:justify-center">
             {[1, 2, 3, 4, 5].map((i) => (
@@ -108,6 +112,15 @@ const Home = () => {
               />
             ))}
           </div>
+        </div>
+        <div className="flex justify-center">
+          <Button
+            btnName="Load More"
+            classStyles="text-xl rounded-xl mt-5 sm:mt-4"
+            handleClick={() => {
+            // router.push(`${buttonLink}`);
+            }}
+          />
         </div>
       </div>
     </div>
