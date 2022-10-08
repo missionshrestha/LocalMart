@@ -2,7 +2,7 @@ import Head from 'next/head';
 import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { useTheme } from 'next-themes';
-import { Banner, Category } from '../components';
+import { Banner, Category, ProductCard } from '../components';
 import images from '../assets';
 
 const Home = () => {
@@ -83,6 +83,30 @@ const Home = () => {
               </div>
             </>
             )}
+
+          </div>
+          <div className="mt-2 flexBetween sm:flex-col sm:items-start">
+            <div>
+              <p className="text-subtitle-blue italic font-semibold text-base md:mb-4 sm:mb-1 ml-4 xs:ml-0">- Our Products</p>
+              <h1 className="font-montserrat dark:text-white text-mart-black-1 text-3xl minlg:text-4xl xs:text-xl font-bold ml-4 xs:ml-0">Explore our Products</h1>
+            </div>
+            <div>SearchBar</div>
+          </div>
+          <div className="mt-3 w-full flex flex-wrap justify-start md:justify-center">
+            {[1, 2, 3, 4, 5].map((i) => (
+              <ProductCard
+                key={`product-${i}`}
+                product={{
+                  i,
+                  name: 'Demo Product 1',
+                  price: 100,
+                  image: 'https://i.ibb.co/2gsWw7b/Product.png',
+                  discount: 50,
+                  discountedPrice: 50,
+                  category: 'Cloth',
+                }}
+              />
+            ))}
           </div>
         </div>
       </div>
