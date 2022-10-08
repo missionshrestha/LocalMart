@@ -10,6 +10,11 @@ class ProductGet(BaseModel):
     created_at: datetime
     updated_at: datetime | None
     price: float
+    created_by: int
+    image_url: str
+    tags: str
+    slug: str
+    discount_percentage: int
 
     class Config:
         orm_mode = True
@@ -19,6 +24,9 @@ class ProductPost(BaseModel):
     title: str
     description: str
     price: float
+    image_url: str
+    tags: str
+    discount_percentage: int
 
     class Config:
         orm_mode = True
