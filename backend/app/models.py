@@ -1,4 +1,3 @@
-from cgitb import text
 from sqlalchemy.sql.sqltypes import Integer, VARCHAR, Text, DateTime, FLOAT
 from sqlalchemy.sql import func
 from .database import Base

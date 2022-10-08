@@ -1,5 +1,4 @@
 from datetime import datetime
-from tkinter.messagebox import NO
 from pydantic import BaseModel, EmailStr
 
 
