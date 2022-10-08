@@ -39,3 +39,16 @@ def add_product(
 
 
 add_pagination(router)
+
+
+@router.get("/{slug}", response_model=schemas.ProductGet)
+def get_user(slug: str, db: Session = Depends(get_db)):
+    product = db.query(models.Product).filter(models.Product.slug == slug).first()
+
+    if not product:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Product with slug: {slug} does not exist",
+        )
+
+    return product
