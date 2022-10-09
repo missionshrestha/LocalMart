@@ -10,7 +10,7 @@ class ProductGet(BaseModel):
     updated_at: datetime | None
     price: float
     created_by: int
-    image_url: str
+    image_url: list | None
     tags: str
     slug: str
     discount_percentage: int
@@ -23,9 +23,9 @@ class ProductPost(BaseModel):
     title: str
     description: str
     price: float
-    image_url: str
+    image_url: list
     tags: str
-    discount_percentage: int
+    discount_percentage: int | None
 
     class Config:
         orm_mode = True

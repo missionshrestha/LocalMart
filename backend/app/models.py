@@ -13,16 +13,15 @@ class Product(Base):
     updated_at = Column(DateTime, onupdate=func.now())
     price = Column(FLOAT, nullable=False)
     created_by = Column(
-        Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False
+        Integer, ForeignKey("user.id", ondelete="CASCADE"), nullable=False
     )
-    image_url = Column(Text, nullable=False)
-    tags = Column(VARCHAR(50), ForeignKey("tags.tag_name", ondelete="CASCADE"))
+    tags = Column(VARCHAR(50), ForeignKey("tag.tag_name", ondelete="CASCADE"))
     slug = Column(Text, nullable=False)
     discount_percentage = Column(Integer, default=0)
 
 
 class User(Base):
-    __tablename__ = "users"
+    __tablename__ = "user"
     id = Column(Integer, primary_key=True)
     email = Column(VARCHAR(50), nullable=False, unique=True)
     password = Column(Text, nullable=False)
@@ -30,6 +29,14 @@ class User(Base):
     phone_number = Column(VARCHAR(15))
 
 
-class Tags(Base):
-    __tablename__ = "tags"
+class Tag(Base):
+    __tablename__ = "tag"
     tag_name = Column(VARCHAR(50), primary_key=True)
+
+
+class ImageURL(Base):
+    __tablename__ = "imageurl"
+    # Just in case PK
+    pk = Column(Integer, primary_key=True)
+    id = Column(Integer, ForeignKey("product.id", ondelete="CASCADE"))
+    url = Column(Text, nullable=False)

@@ -12,6 +12,10 @@ router = APIRouter(prefix="/product", tags=["Product"])
 def get_products(db: Session = Depends(get_db)):
     q = db.query(models.Product).all()
 
+    for i in range(len(q)):
+        url_list = list(db.query(models.ImageURL.url).filter_by(id=q[i].id))
+        q[i].image_url = url_list
+
     if not q:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -31,10 +35,20 @@ def add_product(
     add_current_user.update(
         {"created_by": current_user.id, "slug": slugify(new_product.title)}
     )
+    image_url: list = add_current_user["image_url"]
+    add_current_user.pop("image_url")
 
     new_product = models.Product(**add_current_user)
     db.add(new_product)
     db.commit()
+    db.refresh(new_product)
+
+    for url in image_url:
+        format_img_url = {"id": new_product.id, "url": url}
+        new_url = models.ImageURL(**format_img_url)
+        db.add(new_url)
+        db.commit()
+
     return "Product added!"
 
 
@@ -42,8 +56,12 @@ add_pagination(router)
 
 
 @router.get("/{slug}", response_model=schemas.ProductGet)
-def get_user(slug: str, db: Session = Depends(get_db)):
+def get_product_slug(slug: str, db: Session = Depends(get_db)):
+
     product = db.query(models.Product).filter(models.Product.slug == slug).first()
+
+    url_list = list(db.query(models.ImageURL.url).filter_by(id=product.id))
+    product.image_url = url_list
 
     if not product:
         raise HTTPException(
