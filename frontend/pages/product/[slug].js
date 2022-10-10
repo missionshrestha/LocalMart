@@ -99,7 +99,7 @@ const ProductDetail = () => {
         <div className="flex justify-around h-64">
           <div className="basis-1/4 flex flex-col flex-wrap gap-2 overflow overflow-x-scroll no-scrollbar">
             {product.image_url.map((item, idx) => (
-              <div onClick={() => { setSelected(idx); setMainImage(imageUrls[idx].url); }} className={`${selected === idx && 'border-2 border-logo-green rounded-2xl'} bg-white relative w-full h-1/3 hover:border-2 cursor-pointer`}>
+              <div key={idx} onClick={() => { setSelected(idx); setMainImage(imageUrls[idx].url); }} className={`${selected === idx ? 'border-2 border-logo-green rounded-2xl' : ''} bg-white relative w-full h-1/3 hover:border-2 cursor-pointer`}>
                 <Image className="rounded-2xl" src={imageUrls[idx].url.startsWith('https://') ? imageUrls[idx].url : `https://${imageUrls[idx].url}`} onError={() => { updater(idx); }} layout="fill" objectFit="contain" />
               </div>
             ))}
