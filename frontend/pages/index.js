@@ -2,12 +2,24 @@ import Head from 'next/head';
 import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { useTheme } from 'next-themes';
+import axios from 'axios';
 import { Banner, Category, ProductCard } from '../components';
 import images from '../assets';
 import Button from '../components/Button';
+import { calculateDiscount } from '../utils/calculateDiscount';
+
+const headers = {
+  withCredentials: true,
+  'Content-Type': 'application/json',
+  'Access-Control-Allow-Credentials': true,
+};
+
+const baseURL = process.env.NEXT_PUBLIC_BACKEND_API;
 
 const Home = () => {
+  const [products, setProducts] = useState(null);
   const [hideButtons, setHideButtons] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const parentRef = useRef(null);
   const scrollRef = useRef(null);
   const { theme } = useTheme();
@@ -44,6 +56,18 @@ const Home = () => {
     };
   });
 
+  useEffect(() => {
+    axios.get(`${baseURL}/product`, { headers }).then((response) => {
+      setProducts(response.data.items);
+      setIsLoading(false);
+    }).catch((error) => {
+      console.log(error);
+      setIsLoading(false);
+    });
+  }, []);
+
+  if (!products) return 'No post!';
+
   return (
     <div>
       <Head>
@@ -67,12 +91,6 @@ const Home = () => {
             <Category logo={images.logoDark} title="Featured" />
             <Category logo={images.logoDark} title="Featured" />
             <Category logo={images.logo} title="Featured" />
-            {/* <Category logo={images.logo} title="Featured" />
-            <Category logo={images.logo} title="Featured" />
-            <Category logo={images.logo} title="Featured" />
-            <Category logo={images.logo} title="Featured" />
-            <Category logo={images.logo} title="Featured" />
-            <Category logo={images.logo} title="Featured" /> */}
 
             {!hideButtons && (
             <>
@@ -97,20 +115,23 @@ const Home = () => {
             </div>
           </div>
           <div className="mt-3 w-full flex flex-wrap justify-start md:justify-center">
-            {[1, 2, 3, 4, 5].map((i) => (
+
+            {!isLoading ? products.map((item, i) => (
               <ProductCard
                 key={`product-${i}`}
                 product={{
-                  i,
-                  name: 'Demo Product 1',
-                  price: 100,
-                  image: 'https://i.ibb.co/2gsWw7b/Product.png',
-                  discount: 50,
-                  discountedPrice: 50,
-                  category: 'Cloth',
+                  id: item.id,
+                  name: item.title,
+                  price: item.price,
+                  image: item.image_url[0].url.startsWith('https://') ? item.image_url[0].url : `https://${item.image_url[0].url}`,
+                  discount: item.discount_percentage,
+                  discountedPrice: calculateDiscount(item.price, item.discount_percentage),
+                  slug: item.slug,
+                  category: item.tags,
                 }}
               />
-            ))}
+            )) : 'Loading....'}
+
           </div>
         </div>
         <div className="flex justify-center">
