@@ -14,6 +14,8 @@ class ProductGet(BaseModel):
     tags: str
     slug: str
     discount_percentage: int
+    stock: int
+    is_used: bool
 
     class Config:
         orm_mode = True
@@ -26,6 +28,8 @@ class ProductPost(BaseModel):
     image_url: list
     tags: str
     discount_percentage: int | None
+    stock: int
+    is_used: bool
 
     class Config:
         orm_mode = True

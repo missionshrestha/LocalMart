@@ -1,4 +1,5 @@
-from sqlalchemy.sql.sqltypes import Integer, VARCHAR, Text, DateTime, FLOAT
+from email.policy import default
+from sqlalchemy.sql.sqltypes import Integer, VARCHAR, Text, DateTime, FLOAT, Boolean
 from sqlalchemy.sql import func
 from .database import Base
 from sqlalchemy import Column, ForeignKey
@@ -18,6 +19,8 @@ class Product(Base):
     tags = Column(VARCHAR(50), ForeignKey("tag.tag_name", ondelete="CASCADE"))
     slug = Column(Text, nullable=False)
     discount_percentage = Column(Integer, default=0)
+    stock = Column(Integer, default=1)
+    is_used = Column(Boolean, default=False)
 
 
 class User(Base):
