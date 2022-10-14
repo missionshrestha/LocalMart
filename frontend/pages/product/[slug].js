@@ -56,25 +56,25 @@ const ProductDetail = () => {
     <div className="flex flex-col justify-end sm:px-4 p-12 pt-16">
       <div className="mt-6 w-full md:hidden flex gap-10 h-96">
         <div className="basis-1/5 flex flex-col flex-wrap gap-2 overflow overflow-x-scroll no-scrollbar">
-          {[1, 2, 3, 4].map((item, idx) => (
-            <div onClick={() => { setSelected(idx); }} className={`${selected === idx && 'border-2 border-logo-green rounded-2xl'} relative w-full h-1/3 hover:border-2 cursor-pointer`}>
-              <Image className="rounded-2xl" src="https://i.ibb.co/82qS39N/RE4LiWr.jpg" layout="fill" objectFit="cover" />
+          {product.image_url.map((item, idx) => (
+            <div key={idx} onClick={() => { setSelected(idx); setMainImage(imageUrls[idx].url); }} className={`${selected === idx ? 'border-2 border-logo-green rounded-2xl' : ''} relative w-full h-1/3 hover:border-2 cursor-pointer`}>
+              <Image className="rounded-2xl" src={imageUrls[idx].url.startsWith('https://') ? imageUrls[idx].url : `https://${imageUrls[idx].url}`} onError={() => { updater(idx); }} layout="fill" objectFit="cover" />
             </div>
           ))}
         </div>
         <div className="border-2 border-logo-green rounded-2xl basis-1/2 relative w-full h-full">
-          <div className="z-10 absolute bg-red-600 px-2 py-1 rounded-2xl top-4 -right-8 text-white font-montserrat text-sm font-semibold">50% OFF</div>
-          <Image className="rounded-2xl" src="https://i.ibb.co/82qS39N/RE4LiWr.jpg" layout="fill" objectFit="cover" />
+          {product.discount_percentage > 0 && <div className="z-10 absolute bg-red-600 px-2 py-1 rounded-2xl top-4 -right-8 text-white font-montserrat text-sm font-semibold">{product.discount_percentage}% OFF</div>}
+          <Image className="rounded-2xl" src={mainImage} layout="fill" objectFit="cover" />
         </div>
         <div className="basis-1/2 flex flex-col justify-center items-center">
           <div className="flex flex-col">
-            <p className="text-subtitle-blue italic font-semibold text-base md:mb-4 sm:mb-1 xs:ml-0">- The Electronics</p>
-            <h1 className="text-4xl font-bold">Dell XP13 Laptop</h1>
+            <p className="text-subtitle-blue italic font-semibold text-base md:mb-4 sm:mb-1 xs:ml-0">- The {product.tags}</p>
+            <h1 className="text-4xl font-bold">{product.title}</h1>
             <div className="mt-5 flex">
-              <span className="bg-gray-600 px-4 py-2 rounded-2xl text-white font-montserrat text-sm font-semibold">GADGET</span>
+              <span className="bg-gray-600 px-4 py-2 rounded-2xl text-white font-montserrat text-sm font-semibold">{product.tags.toUpperCase()}</span>
               <div className="flex gap-3 ml-8 text-2xl">
-                <div className="text text-mart-gray-2 line-through">$1500</div>
-                <div className="font-semibold">$725</div>
+                {product.discount_percentage > 0 && <div className="text text-mart-gray-2 line-through">${product.price}</div>}
+                <div className="font-semibold">${calculateDiscount(product.price, product.discount_percentage)}</div>
               </div>
             </div>
             <div className="flex gap-10 items-center mt-8">
