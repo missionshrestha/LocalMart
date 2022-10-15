@@ -1,4 +1,3 @@
-from email.policy import default
 from sqlalchemy.sql.sqltypes import Integer, VARCHAR, Text, DateTime, FLOAT, Boolean
 from sqlalchemy.sql import func
 from .database import Base
