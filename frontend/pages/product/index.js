@@ -14,8 +14,8 @@ const Product = () => {
           <h1 className="font-montserrat dark:text-white text-mart-black-1 text-3xl minlg:text-4xl xs:text-xl font-bold ml-4 xs:ml-0">Explore our Products</h1>
         </div>
         <div className="flex gap-2">
-          <Image onClick={() => { }} src={images.leftArrow} width={32} objectFit="contain" alt="left-arrow" className={`cursor-pointer hover:scale-105 ${theme === 'dark' && 'filter invert'}`} />
-          <Image onClick={() => { }} src={images.rightArrow} width={32} objectFit="contain" alt="left-arrow" className={`cursor-pointer hover:scale-105 ${theme === 'dark' && 'filter invert'}`} />
+          <Image onClick={() => { }} src={images.leftArrow} width={32} objectFit="contain" alt="left-arrow" className={`cursor-pointer hover:scale-105 ${theme === 'dark' ? 'filter invert' : ''}`} />
+          <Image onClick={() => { }} src={images.rightArrow} width={32} objectFit="contain" alt="left-arrow" className={`cursor-pointer hover:scale-105 ${theme === 'dark' ? 'filter invert' : ''}`} />
         </div>
       </div>
       <div className="mt-3 w-full flex flex-wrap justify-start md:justify-center">

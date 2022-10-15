@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import axios from 'axios';
-import { Input } from '../components';
+import { toast } from 'react-toastify';
+import { Input, Notification } from '../components';
 import Button from '../components/Button';
 import validateEmail from '../utils/validateEmail';
 import { useAuthContext } from '../hooks/useAuthContext';
@@ -12,7 +13,7 @@ const Login = () => {
   const router = useRouter();
   const [inputDetail, setInputDetail] = useState({ email: '', password: '' });
   const [validationMessage, setValidationMessage] = useState({ email: '', password: '' });
-  const [data, setData] = useState();
+  // const [data, setData] = useState();
   const { dispatch } = useAuthContext();
 
   const handleLogin = () => {
@@ -30,7 +31,7 @@ const Login = () => {
     })
       .then((response) => {
         if (response.status === 200) {
-          setData(response.data);
+          // setData(response.data);
           console.log(response.data);
           localStorage.setItem('user', JSON.stringify(response.data));
           dispatch({ type: 'LOGIN', payload: response.data });
@@ -54,7 +55,11 @@ const Login = () => {
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'));
     if (user) {
-      router.push('/', undefined, { shallow: true });
+      const notify = () => toast('Found previous session, Logging you in');
+      notify();
+      setTimeout(() => {
+        router.push('/', undefined, { shallow: true });
+      }, 3000);
     }
   }, []);
 
@@ -84,6 +89,7 @@ const Login = () => {
               <div className="mt-8 flex w-full justify-center">
                 <span className="text-mart-gray-2 underline cursor-pointer">
                   Forget Password?
+                  <Notification />
                 </span>
               </div>
             </div>

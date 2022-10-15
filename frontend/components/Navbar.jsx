@@ -23,7 +23,7 @@ const MenuItems = ({ isMobile, active, setActive }) => {
   };
 
   return (
-    <ul className={`list-none flexCenter flex-row ${isMobile && 'flex-col h-full gap-6'}`}>
+    <ul className={`list-none flexCenter flex-row ${isMobile ? 'flex-col h-full gap-6' : ''}`}>
       {['Home', 'Categories', 'About', 'Contact'].map((item, i) => (
         <li key={i} onClick={() => { setActive(item); }} className={`flex flex-row items-center font-montserrat font-normal text-2xl leading-10 dark:hover:text-white hover:text-mart-dark mx-3 ${active === item ? 'dark:text-white text-mart-dark-1' : 'dark:text-mart-gray-3 text-mart-gray-2'}`}>
           <Link href={generateLink(i)}>{item}</Link>
@@ -43,8 +43,8 @@ const Navbar = () => {
     <nav className="flex justify-between w-full fixed z-20 py-4 px-10 flex-row border-b dark:bg-mart-dark bg-white dark:border-mart-dark-1 border-mart-gray-1">
 
       <div className="hidden md:flex ml-2">
-        {isOpen ? (<Image src={images.cross} objectFit="contain" width={35} height={35} alt="menu" onClick={() => { setIsOpen(false); }} className={theme === 'dark' && 'filter invert'} />) : (
-          <Image src={images.menu} objectFit="contain" width={35} height={35} alt="menu" onClick={() => { setIsOpen(true); }} className={theme === 'dark' && 'filter invert'} />
+        {isOpen ? (<Image src={images.cross} objectFit="contain" width={35} height={35} alt="menu" onClick={() => { setIsOpen(false); }} className={theme === 'dark' ? 'filter invert' : ''} />) : (
+          <Image src={images.menu} objectFit="contain" width={35} height={35} alt="menu" onClick={() => { setIsOpen(true); }} className={theme === 'dark' ? 'filter invert' : ''} />
         )}
 
         {isOpen && (
@@ -81,8 +81,8 @@ const Navbar = () => {
       </div>
 
       <div className="flex ml-2 justify-center md:hidden">
-        {isOpen ? (<Image src={images.cross} objectFit="contain" width={35} height={35} alt="menu" onClick={() => { setIsOpen(false); }} className={theme === 'dark' && 'filter invert'} />) : (
-          <Image src={images.menu} objectFit="contain" width={35} height={35} alt="menu" onClick={() => { setIsOpen(true); }} className={theme === 'dark' && 'filter invert'} />
+        {isOpen ? (<Image src={images.cross} objectFit="contain" width={35} height={35} alt="menu" onClick={() => { setIsOpen(false); }} className={theme === 'dark' ? 'filter invert' : ''} />) : (
+          <Image src={images.menu} objectFit="contain" width={35} height={35} alt="menu" onClick={() => { setIsOpen(true); }} className={theme === 'dark' ? 'filter invert' : ''} />
         )}
 
         {isOpen && (
@@ -115,10 +115,10 @@ const Navbar = () => {
         </div>
         <div className="ml-3 flex flex-row items-center gap-3">
           <div>
-            <Image src={images.cart} className={theme === 'dark' && 'filter invert'} href="/" alt="cart" />
+            <Image src={images.cart} className={theme === 'dark' ? 'filter invert' : ''} href="/" alt="cart" />
           </div>
           <div>
-            <Image src={images.profile} className={theme === 'dark' && 'filter invert'} href="/" alt="profile" />
+            <Image src={images.profile} className={theme === 'dark' ? 'filter invert' : ''} href="/" alt="profile" />
           </div>
         </div>
       </div>
@@ -127,10 +127,10 @@ const Navbar = () => {
         <div className="flex items-center mr-2">
           <div className="ml-3 flex flex-row items-center gap-3">
             <div>
-              <Image src={images.cart} className={theme === 'dark' && 'filter invert'} href="/" alt="cart" />
+              <Image src={images.cart} className={theme === 'dark' ? 'filter invert' : ''} href="/" alt="cart" />
             </div>
             <div>
-              <Image src={images.profile} className={theme === 'dark' && 'filter invert'} href="/" alt="profile" />
+              <Image src={images.profile} className={theme === 'dark' ? 'filter invert' : ''} href="/" alt="profile" />
             </div>
           </div>
         </div>

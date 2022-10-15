@@ -95,10 +95,10 @@ const Home = () => {
             {!hideButtons && (
             <>
               <div className="absolute w-8 h-8 minlg:w-12 minlg:h-12 top-14 cursor-pointer -left-3">
-                <Image onClick={() => { handleScroll('left'); }} src={images.leftArrow} layout="fill" objectFit="contain" alt="left-arrow" className={theme === 'dark' && 'filter invert'} />
+                <Image onClick={() => { handleScroll('left'); }} src={images.leftArrow} layout="fill" objectFit="contain" alt="left-arrow" className={theme === 'dark' ? 'filter invert' : ''} />
               </div>
               <div className="absolute w-8 h-8 minlg:w-12 minlg:h-12 top-14 cursor-pointer -right-3">
-                <Image onClick={() => { handleScroll('right'); }} src={images.rightArrow} layout="fill" objectFit="contain" alt="left-arrow" className={theme === 'dark' && 'filter invert'} />
+                <Image onClick={() => { handleScroll('right'); }} src={images.rightArrow} layout="fill" objectFit="contain" alt="left-arrow" className={theme === 'dark' ? 'filter invert' : ''} />
               </div>
             </>
             )}
@@ -110,8 +110,8 @@ const Home = () => {
               <h1 className="font-montserrat dark:text-white text-mart-black-1 text-3xl minlg:text-4xl xs:text-xl font-bold ml-4 xs:ml-0">Explore our Products</h1>
             </div>
             <div className="flex gap-2">
-              <Image onClick={() => { }} src={images.leftArrow} width={32} objectFit="contain" alt="left-arrow" className={`cursor-pointer hover:scale-105 ${theme === 'dark' && 'filter invert'}`} />
-              <Image onClick={() => { }} src={images.rightArrow} width={32} objectFit="contain" alt="left-arrow" className={`cursor-pointer hover:scale-105 ${theme === 'dark' && 'filter invert'}`} />
+              <Image onClick={() => { }} src={images.leftArrow} width={32} objectFit="contain" alt="left-arrow" className={`cursor-pointer hover:scale-105 ${theme === 'dark' ? 'filter invert' : ''}`} />
+              <Image onClick={() => { }} src={images.rightArrow} width={32} objectFit="contain" alt="left-arrow" className={`cursor-pointer hover:scale-105 ${theme === 'dark' ? 'filter invert' : ''}`} />
             </div>
           </div>
           <div className="mt-3 w-full flex flex-wrap justify-start md:justify-center">

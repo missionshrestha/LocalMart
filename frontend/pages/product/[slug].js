@@ -79,9 +79,9 @@ const ProductDetail = () => {
             </div>
             <div className="flex gap-10 items-center mt-8">
               <div className="flex gap-2 items-center text-2xl">
-                <Image onClick={() => { }} src={images.leftArrow} width={42} objectFit="contain" alt="left-arrow" className={`cursor-pointer hover:scale-105 ${theme === 'dark' && 'filter invert'}`} />
+                <Image onClick={() => { }} src={images.leftArrow} width={42} objectFit="contain" alt="left-arrow" className={`cursor-pointer hover:scale-105 ${theme === 'dark' ? 'filter invert' : ''}`} />
                 <span className="mx-2">1</span>
-                <Image onClick={() => { }} src={images.rightArrow} width={42} objectFit="contain" alt="left-arrow" className={`cursor-pointer hover:scale-105 ${theme === 'dark' && 'filter invert'}`} />
+                <Image onClick={() => { }} src={images.rightArrow} width={42} objectFit="contain" alt="left-arrow" className={`cursor-pointer hover:scale-105 ${theme === 'dark' ? 'filter invert' : ''}`} />
               </div>
               <Button
                 btnName="Add to cart"
@@ -122,9 +122,9 @@ const ProductDetail = () => {
             </div>
             <div className="flex gap-10 items-center mt-8">
               <div className="flex gap-2 items-center text-2xl">
-                <Image onClick={() => { }} src={images.leftArrow} width={42} objectFit="contain" alt="left-arrow" className={`cursor-pointer hover:scale-105 ${theme === 'dark' && 'filter invert'}`} />
+                <Image onClick={() => { }} src={images.leftArrow} width={42} objectFit="contain" alt="left-arrow" className={`cursor-pointer hover:scale-105 ${theme === 'dark' ? 'filter invert' : ''}`} />
                 <span className="mx-2">1</span>
-                <Image onClick={() => { }} src={images.rightArrow} width={42} objectFit="contain" alt="left-arrow" className={`cursor-pointer hover:scale-105 ${theme === 'dark' && 'filter invert'}`} />
+                <Image onClick={() => { }} src={images.rightArrow} width={42} objectFit="contain" alt="left-arrow" className={`cursor-pointer hover:scale-105 ${theme === 'dark' ? 'filter invert' : ''}`} />
               </div>
               <Button
                 btnName="Add to cart"
