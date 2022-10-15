@@ -1,16 +1,45 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import axios from 'axios';
 import { Input } from '../components';
 import Button from '../components/Button';
 import validateEmail from '../utils/validateEmail';
-
+import { useAuthContext } from '../hooks/useAuthContext';
 // const validatePassword = (password) => (password.length >= 8);
 
 const Login = () => {
   const router = useRouter();
   const [inputDetail, setInputDetail] = useState({ email: '', password: '' });
   const [validationMessage, setValidationMessage] = useState({ email: '', password: '' });
+  const [data, setData] = useState();
+  const { dispatch } = useAuthContext();
+
+  const handleLogin = () => {
+    const formData = new FormData();
+    formData.append('username', inputDetail.email);
+    formData.append('password', inputDetail.password);
+    axios({
+      method: 'post',
+      url: `${process.env.NEXT_PUBLIC_BACKEND_API}/login`,
+      data: formData,
+      headers: {
+        accept: 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+      },
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          setData(response.data);
+          console.log(response.data);
+          localStorage.setItem('user', JSON.stringify(response.data));
+          dispatch({ type: 'LOGIN', payload: response.data });
+          setInputDetail({ email: '', password: '' });
+          router.push('/', undefined, { shallow: true });
+        }
+      })
+      .catch((error) => { console.log(error); console.log(error.response); });
+  };
 
   const handleValidation = (attribute, value) => {
     if (attribute === 'email') {
@@ -20,15 +49,14 @@ const Login = () => {
         setValidationMessage({ ...validationMessage, email: 'Enter a valid email' });
       }
     }
-
-    // if (attribute === 'password') {
-    //   if (validatePassword(value)) {
-    //     setValidationMessage({ ...validationMessage, password: '' });
-    //   } else {
-    //     setValidationMessage({ ...validationMessage, password: 'Password should have at least 8 characters.' });
-    //   }
-    // }
   };
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user) {
+      router.push('/', undefined, { shallow: true });
+    }
+  }, []);
 
   return (
     <div>
@@ -44,12 +72,12 @@ const Login = () => {
             <p className="text-subtitle-blue italic font-semibold text-base md:mb-4 sm:mb-1 ml-4 xs:ml-0">- Login</p>
             <h1 className="font-montserrat dark:text-white text-mart-black-1 text-3xl minlg:text-4xl xs:text-xl font-bold ml-4 xs:ml-0">Login to Your Account</h1>
             <div className="m-auto w-2/5 md:w-3/5 sm:w-4/5 xs:w-full">
-              <Input inputType="input" title="Email Address" placeholder="Enter your email" handleClick={(e) => { setInputDetail({ ...inputDetail, email: e.target.value }); handleValidation('email', e.target.value); }} />
+              <Input value={inputDetail.email} inputType="input" title="Email Address" placeholder="Enter your email" handleClick={(e) => { setInputDetail({ ...inputDetail, email: e.target.value }); handleValidation('email', e.target.value); }} />
               {validationMessage.email !== '' && <p className="absolute text-red-500">{validationMessage.email}</p>}
-              <Input inputType="password" hidePassword title="Password" placeholder="Enter your password" handleClick={(e) => { setInputDetail({ ...inputDetail, password: e.target.value }); handleValidation('password', e.target.value); }} />
+              <Input value={inputDetail.password} inputType="password" hidePassword title="Password" placeholder="Enter your password" handleClick={(e) => { setInputDetail({ ...inputDetail, password: e.target.value }); handleValidation('password', e.target.value); }} />
               {/* {validationMessage.password !== '' && <p className="absolute text-red-500">{validationMessage.password}</p>} */}
               <div className="mt-12 w-full flex justify-between">
-                <Button btnName="Login" classStyles="rounded-md w-2/5 py-3 xs:py-2" />
+                <Button btnName="Login" handleClick={handleLogin} classStyles="rounded-md w-2/5 py-3 xs:py-2" />
 
                 <Button btnName="Create account" classStyles="rounded-md w-2/5 py-3 border text-black bg-gray-100 xs:py-2" handleClick={() => router.push('/signup', undefined, { shallow: true })} />
               </div>
