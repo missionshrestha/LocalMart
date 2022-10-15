@@ -39,6 +39,7 @@ class UserCreate(BaseModel):
     email: EmailStr
     password: str
     phone_number: str
+    profile_img: str
 
     class Config:
         orm_mode = True
@@ -49,6 +50,7 @@ class UserOut(BaseModel):
     email: EmailStr
     created_at: datetime
     phone_number: str
+    profile_img: str
 
     class Config:
         orm_mode = True

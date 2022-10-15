@@ -30,6 +30,7 @@ class User(Base):
     password = Column(Text, nullable=False)
     created_at = Column(DateTime, server_default=func.now())
     phone_number = Column(VARCHAR(15))
+    profile_img = Column(Text, nullable=False)
 
 
 class Tag(Base):

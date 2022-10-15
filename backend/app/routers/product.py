@@ -60,8 +60,8 @@ def get_product_slug(slug: str, db: Session = Depends(get_db)):
 
     product = db.query(models.Product).filter(models.Product.slug == slug).first()
 
-    url_list = list(db.query(models.ImageURL.url).filter_by(id=product.id))
-    product.image_url = url_list
+    url_list = list(db.query(models.ImageURL.url).filter_by(id=product.id))  # type: ignore
+    product.image_url = url_list  # type: ignore
 
     if not product:
         raise HTTPException(
