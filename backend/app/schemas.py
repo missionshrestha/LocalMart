@@ -36,6 +36,7 @@ class ProductPost(BaseModel):
 
 
 class UserCreate(BaseModel):
+    name: str
     email: EmailStr
     password: str
     phone_number: str
@@ -47,6 +48,7 @@ class UserCreate(BaseModel):
 
 class UserOut(BaseModel):
     id: int
+    name: str
     email: EmailStr
     created_at: datetime
     phone_number: str
@@ -56,9 +58,12 @@ class UserOut(BaseModel):
         orm_mode = True
 
 
-class Token(BaseModel):
+class Login(BaseModel):
     access_token: str
     token_type: str
+    name: str
+    email: EmailStr
+    profile_img: str
 
 
 class TokenData(BaseModel):

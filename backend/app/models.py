@@ -25,6 +25,7 @@ class Product(Base):
 class User(Base):
     __tablename__ = "user"
     id = Column(Integer, primary_key=True)
+    name = Column(VARCHAR(50), nullable=False)
     email = Column(VARCHAR(50), nullable=False, unique=True)
     password = Column(Text, nullable=False)
     created_at = Column(DateTime, server_default=func.now())
