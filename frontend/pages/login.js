@@ -1,6 +1,7 @@
 import React from 'react';
 import Head from 'next/head';
 import { Input } from '../components';
+import Button from '../components/Button';
 
 const Login = () => (
   <div>
@@ -15,8 +16,18 @@ const Login = () => (
         <div className="w-full">
           <p className="text-subtitle-blue italic font-semibold text-base md:mb-4 sm:mb-1 ml-4 xs:ml-0">- Login</p>
           <h1 className="font-montserrat dark:text-white text-mart-black-1 text-3xl minlg:text-4xl xs:text-xl font-bold ml-4 xs:ml-0">Login to Your Account</h1>
-          <div className="m-auto w-2/5">
+          <div className="m-auto w-2/5 md:w-3/5 sm:w-4/5 xs:w-full">
             <Input inputType="input" title="Email Address" placeholder="Enter your email" handleClick={() => {}} />
+            <Input inputType="password" hidePassword title="Password" placeholder="Enter your password" handleClick={() => {}} />
+            <div className="mt-8 w-full flex justify-between">
+              <Button btnName="Login" classStyles="rounded-md w-2/5 py-3 xs:py-2" />
+              <Button btnName="Create account" classStyles="rounded-md w-2/5 py-3 border text-black bg-gray-100 xs:py-2" />
+            </div>
+            <div className="mt-8 flex w-full justify-center">
+              <span className="text-mart-gray-2 underline cursor-pointer">
+                Forget Password?
+              </span>
+            </div>
           </div>
         </div>
       </div>
