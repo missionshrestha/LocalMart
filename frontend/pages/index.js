@@ -18,6 +18,7 @@ const baseURL = process.env.NEXT_PUBLIC_BACKEND_API;
 
 const Home = () => {
   const [products, setProducts] = useState(null);
+  const [category, setCategory] = useState(null);
   const [hideButtons, setHideButtons] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const parentRef = useRef(null);
@@ -57,6 +58,12 @@ const Home = () => {
   });
 
   useEffect(() => {
+    axios.get(`${baseURL}/categories`, { headers }).then((response) => {
+      setCategory(response.data);
+    }).catch((e) => {
+      console.log(e);
+    });
+
     axios.get(`${baseURL}/product`, { headers }).then((response) => {
       setProducts(response.data.items);
       setIsLoading(false);
@@ -86,11 +93,9 @@ const Home = () => {
         </div>
         <div className="relative flex-1 max-w-full " ref={parentRef}>
           <div className="flex overflow-x-scroll no-scrollbar" ref={scrollRef}>
-            <Category logo={images.logoDark} title="OnSale" />
-            <Category logo={images.logoDark} title="Featured" />
-            <Category logo={images.logoDark} title="Featured" />
-            <Category logo={images.logoDark} title="Featured" />
-            <Category logo={images.logo} title="Featured" />
+            {category.map((item, i) => (
+              <Category key={i} logo={images.logoDark} title={item.tag_name} />
+            ))}
 
             {!hideButtons && (
             <>
