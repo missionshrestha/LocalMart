@@ -81,7 +81,6 @@ def search_products(q: str | None = None, db: Session = Depends(get_db)):
         )
         .all()
     )
-    print(prod)
     for i in range(len(prod)):
         url_list = list(db.query(models.ImageURL.url).filter_by(id=prod[i].id))  # type: ignore
         prod[i].image_url = url_list  # type: ignore

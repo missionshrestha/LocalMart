@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, status, HTTPException
 from ..database import get_db
 from .. import schemas, models
 from sqlalchemy.orm import Session
+from fastapi_pagination import Page, paginate, add_pagination
 
 router = APIRouter(prefix="/categories", tags=["Categories"])
 
@@ -16,3 +17,21 @@ def get_products(db: Session = Depends(get_db)):
             detail="Product does not exist",
         )
     return q
+
+
+@router.get("/{tag}", response_model=Page[schemas.ProductGet])
+def search_products(tag: str | None = None, db: Session = Depends(get_db)):
+    prod = db.query(models.Product).filter((models.Product.tags == tag)).all()
+    for i in range(len(prod)):
+        url_list = list(db.query(models.ImageURL.url).filter_by(id=prod[i].id))  # type: ignore
+        prod[i].image_url = url_list  # type: ignore
+
+    if not prod:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Product does not exist",
+        )
+    return paginate(prod)
+
+
+add_pagination(router)
