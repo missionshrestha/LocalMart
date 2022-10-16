@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useTheme } from 'next-themes';
 import Image from 'next/image';
@@ -12,10 +12,12 @@ const MenuItems = ({ isMobile, active, setActive }) => {
       case 0:
         return '/';
       case 1:
-        return '/categories';
+        return '/product';
       case 2:
-        return '/about';
+        return '/categories';
       case 3:
+        return '/about';
+      case 4:
         return '/contact';
       default:
         break;
@@ -24,7 +26,7 @@ const MenuItems = ({ isMobile, active, setActive }) => {
 
   return (
     <ul className={`list-none flexCenter flex-row ${isMobile ? 'flex-col h-full gap-6' : ''}`}>
-      {['Home', 'Categories', 'About', 'Contact'].map((item, i) => (
+      {['Home', 'Products', 'Categories', 'About', 'Contact'].map((item, i) => (
         <li key={i} onClick={() => { setActive(item); }} className={`flex flex-row items-center font-montserrat font-normal text-2xl leading-10 dark:hover:text-white hover:text-mart-dark mx-3 ${active === item ? 'dark:text-white text-mart-dark-1' : 'dark:text-mart-gray-3 text-mart-gray-2'}`}>
           <Link href={generateLink(i)}>{item}</Link>
         </li>
@@ -38,6 +40,10 @@ const Navbar = () => {
   const [active, setActive] = useState('Home');
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    setIsOpen(false);
+  }, [router]);
 
   return (
     <nav className="flex justify-between w-full fixed z-20 py-4 px-10 flex-row border-b dark:bg-mart-dark bg-white dark:border-mart-dark-1 border-mart-gray-1">

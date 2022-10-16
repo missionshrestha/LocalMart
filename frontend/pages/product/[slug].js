@@ -50,7 +50,13 @@ const ProductDetail = () => {
     setMainImage(newImageUrls[0].url);
   };
 
-  if (!product) return 'No post!';
+  if (!product) {
+    return (
+      <div className="h-screen flex items-center justify-center">
+        Loading . . .
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col justify-end sm:px-4 p-12 pt-16">
@@ -130,7 +136,7 @@ const ProductDetail = () => {
                 btnName="Add to cart"
                 classStyles="text-xl rounded-xl py-3"
                 handleClick={() => {
-                // router.push(`${buttonLink}`);
+                  // router.push(`${buttonLink}`);
                 }}
               />
             </div>

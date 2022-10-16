@@ -10,5 +10,6 @@ import defaultProduct from './defaultProduct.png';
 import instagram from './instagram.png';
 import telegram from './telegram.png';
 import twitter from './twitter.png';
+import upload from './upload.png';
 
-export default { logo, logoDark, cross, menu, cart, profile, leftArrow, rightArrow, defaultProduct, instagram, telegram, twitter };
+export default { logo, logoDark, cross, menu, cart, profile, leftArrow, rightArrow, defaultProduct, instagram, telegram, twitter, upload };

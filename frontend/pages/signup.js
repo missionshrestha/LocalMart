@@ -1,14 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { useDropzone } from 'react-dropzone';
+import Image from 'next/image';
+import { useTheme } from 'next-themes';
 import { Input } from '../components';
 import Button from '../components/Button';
 import validateEmail from '../utils/validateEmail';
+import images from '../assets';
 
 const validatePassword = (password) => (password.length >= 8);
 
+const uploadToCloudinary = async (image) => {
+  const data = new FormData();
+  data.append('file', image);
+  data.append('upload_preset', 'localmart');
+  data.append('cloud_name', 'dcmsjwslq');
+  const res = await fetch('https://api.cloudinary.com/v1_1/dcmsjwslq/image/upload', {
+    method: 'post',
+    body: data,
+  });
+
+  const result = await res.json();
+  // console.log(result.url);
+  return result.url;
+};
+
 const SignUp = () => {
   const router = useRouter();
+  const { theme } = useTheme();
+  const [fileUrl, setFileUrl] = useState(null);
   const [inputDetail, setInputDetail] = useState({ name: '', email: '', password: '' });
   const [validationMessage, setValidationMessage] = useState({ email: '', password: '' });
 
@@ -30,6 +51,32 @@ const SignUp = () => {
     }
   };
 
+  const onDrop = useCallback(async (acceptedFile) => {
+    // upload image to the cloudinary
+    const url = await uploadToCloudinary(acceptedFile[0]);
+    console.log(url);
+
+    if (acceptedFile[0].type.match('image.*')) {
+      setFileUrl(url);
+    }
+  }, []);
+
+  const { getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject } = useDropzone({
+    onDrop,
+    accept: {
+      'image/png': ['.png'],
+      'image/jpeg': ['.jpg', '.jpeg'],
+    },
+  });
+
+  const fileStyle = useMemo(() => (
+    `rounded-full dark:bg-mart-black-1 bg-white border dark:border-white border-mart-gray-2 p-5 flex flex-col items-center border-dashed
+    ${isDragActive && 'border-file-active'}
+    ${isDragAccept && 'border-file-accept'}
+    ${isDragReject && 'border-file-reject'}
+    `
+  ), [isDragActive, isDragAccept, isDragReject]);
+
   return (
     <div>
       <Head>
@@ -49,6 +96,31 @@ const SignUp = () => {
               {validationMessage.email !== '' && <p className="absolute text-red-500">{validationMessage.email}</p>}
               <Input inputType="password" hidePassword title="Password" placeholder="Enter your password" handleClick={(e) => { setInputDetail({ ...inputDetail, password: e.target.value }); handleValidation('password', e.target.value); }} />
               {validationMessage.password !== '' && <p className="absolute text-red-500">{validationMessage.password}</p>}
+              <div className="mt-16">
+                <p className="font-poppins dark:text-white text-book-black-1 font-semibold text-xl">Profile Picture</p>
+                <div className="mt-4 w-full flex justify-center">
+                  <div {...getRootProps()} className={fileStyle}>
+                    <input {...getInputProps()} />
+                    <div className="flexCenter flex-col text-center">
+                      {/* <p className="font-poppins dark:text-white text-book-black-1 font-semibold text-xl">JPG, PNG, GIF, SVG, WEBM.</p> */}
+                      <div className="flex justify-center h-32 w-32 cursor-pointer">
+                        {!fileUrl
+                          ? <Image src={images.upload} width={50} height={50} objectFit="contain" alt="file upload" className={`${theme === 'dark' ? 'filter invert' : ''}`} />
+                          : <img src={fileUrl} alt="file upload" className="rounded-full object-cover" />}
+                      </div>
+                      {/* <p className="font-poppins dark:text-white text-book-black-1 font-semibold text-sm">Drag and Drop File</p>
+                      <p className="font-poppins dark:text-white text-book-black-1 font-semibold text-sm">or Browse media on your device </p> */}
+                    </div>
+                  </div>
+                  {/* {fileUrl && (
+                  <aside>
+                    <div>
+                      <img src={fileUrl} alt="asset_file" />
+                    </div>
+                  </aside>
+                  )} */}
+                </div>
+              </div>
               <div className="mt-12 w-full flex justify-between">
                 <Button btnName="Create account" classStyles="rounded-md w-2/5 py-3 xs:py-2" />
 
