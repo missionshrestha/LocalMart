@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import images from '../assets';
 import Button from './Button';
+import { useAuthContext } from '../hooks/useAuthContext';
 
 const MenuItems = ({ isMobile, active, setActive }) => {
   const generateLink = (i) => {
@@ -36,6 +37,7 @@ const MenuItems = ({ isMobile, active, setActive }) => {
 };
 
 const Navbar = () => {
+  const { user } = useAuthContext();
   const { theme, setTheme } = useTheme();
   const [active, setActive] = useState('Home');
   const router = useRouter();
@@ -123,8 +125,16 @@ const Navbar = () => {
           <div>
             <Image src={images.cart} className={theme === 'dark' ? 'filter invert' : ''} href="/" alt="cart" />
           </div>
-          <div>
-            <Image src={images.profile} className={theme === 'dark' ? 'filter invert' : ''} href="/" alt="profile" />
+          <div className="h-8 w-8 rounded-full bg-slate-50 flex justify-center items-center">
+            { !user ? <Image src={images.profile} className={theme === 'dark' ? 'filter invert' : ''} href="/" alt="profile" /> : (
+              <div className="h-8 w-8 rounded-full relative">
+                <img src={user.profile_img} className="object-cover h-full rounded-full" />
+                <div className="hidden bg-black absolute top-10 w-full">
+                  <div>Profile</div>
+                  <div onClick={() => {}}>Logout</div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -136,7 +146,16 @@ const Navbar = () => {
               <Image src={images.cart} className={theme === 'dark' ? 'filter invert' : ''} href="/" alt="cart" />
             </div>
             <div>
-              <Image src={images.profile} className={theme === 'dark' ? 'filter invert' : ''} href="/" alt="profile" />
+              {/* <Image src={images.profile} className={theme === 'dark' ? 'filter invert' : ''} href="/" alt="profile" /> */}
+              { !user ? <Image src={images.profile} className={theme === 'dark' ? 'filter invert' : ''} href="/" alt="profile" /> : (
+                <div className="h-8 w-8 rounded-full relative">
+                  <img src={user.profile_img} className="object-cover h-full rounded-full" />
+                  <div className="hidden bg-black absolute top-10 w-full">
+                    <div>Profile</div>
+                    <div onClick={() => {}}>Logout</div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
