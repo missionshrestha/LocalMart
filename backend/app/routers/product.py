@@ -52,9 +52,6 @@ def add_product(
     return "Product added!"
 
 
-add_pagination(router)
-
-
 @router.get("/{slug}", response_model=schemas.ProductGet)
 def get_product_slug(slug: str, db: Session = Depends(get_db)):
 
@@ -70,3 +67,30 @@ def get_product_slug(slug: str, db: Session = Depends(get_db)):
         )
 
     return product
+
+
+@router.get("/search/", response_model=Page[schemas.ProductGet])
+def search_products(q: str | None = None, db: Session = Depends(get_db)):
+    q = "%{}%".format(q)
+    prod = (
+        db.query(models.Product)
+        .filter(
+            (models.Product.title.like(q))
+            | (models.Product.description.like(q))
+            | (models.Product.tags.like(q))
+        )
+        .all()
+    )
+    for i in range(len(prod)):
+        url_list = list(db.query(models.ImageURL.url).filter_by(id=prod[i].id))  # type: ignore
+        prod[i].image_url = url_list  # type: ignore
+
+    if not prod:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Product does not exist",
+        )
+    return paginate(prod)
+
+
+add_pagination(router)
