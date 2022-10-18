@@ -36,3 +36,20 @@ $ pip install -r requirements.txt
 # Start the server (Listens on port 8000)
 $ uvicorn app.main:app --reload
 ```
+
+## Run Locally (Frontend Development Environment) 
+
+Prerequisite: You need to have <a href="https://nodejs.org/dist/v16.18.0/node-v16.18.0-x64.msi">Node.js</a>  installed in your system. 
+
+On the terminal,
+```bash
+$ cd LocalMart/frontend
+
+$ npm install 
+
+# Place the .env.local file in the frontend directory which declare the follwing variable
+# NEXT_PUBLIC_BACKEND_API ="Location at which your backend server is running"
+
+# Start the server
+$ npm run dev
+```
