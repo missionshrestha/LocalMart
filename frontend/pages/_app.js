@@ -3,7 +3,7 @@ import '../styles/globals.css';
 import { ThemeProvider } from 'next-themes';
 import { Navbar, Footer } from '../components';
 import { AuthContextProvider } from '../context/AuthContext';
-import { CartContext, ShopContextProvider } from '../context/ShopContext';
+import { ShopContextProvider } from '../context/ShopContext';
 
 const MyApp = ({ Component, pageProps }) => (
   <AuthContextProvider>

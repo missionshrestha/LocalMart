@@ -18,7 +18,7 @@ const baseURL = process.env.NEXT_PUBLIC_BACKEND_API;
 
 const ProductDetail = () => {
   const [product, setProduct] = useState(null);
-  const { qty } = useShopContext();
+  const { qty, increaseQty, decreaseQty } = useShopContext();
   console.log(qty);
   const [imageUrls, setImageUrls] = useState([]);
   const [mainImage, setMainImage] = useState(null);
@@ -88,9 +88,9 @@ const ProductDetail = () => {
             </div>
             <div className="flex gap-10 items-center mt-8">
               <div className="flex gap-2 items-center text-2xl">
-                <Image onClick={() => { }} src={images.leftArrow} width={42} objectFit="contain" alt="left-arrow" className={`cursor-pointer hover:scale-105 ${theme === 'dark' ? 'filter invert' : ''}`} />
+                <Image onClick={decreaseQty} src={images.leftArrow} width={42} objectFit="contain" alt="left-arrow" className={`cursor-pointer hover:scale-105 ${theme === 'dark' ? 'filter invert' : ''}`} />
                 <span className="mx-2">{qty}</span>
-                <Image onClick={() => { }} src={images.rightArrow} width={42} objectFit="contain" alt="left-arrow" className={`cursor-pointer hover:scale-105 ${theme === 'dark' ? 'filter invert' : ''}`} />
+                <Image onClick={increaseQty} src={images.rightArrow} width={42} objectFit="contain" alt="left-arrow" className={`cursor-pointer hover:scale-105 ${theme === 'dark' ? 'filter invert' : ''}`} />
               </div>
               <Button
                 btnName="Add to cart"
@@ -131,9 +131,9 @@ const ProductDetail = () => {
             </div>
             <div className="flex gap-10 items-center mt-8">
               <div className="flex gap-2 items-center text-2xl">
-                <Image onClick={() => { }} src={images.leftArrow} width={42} objectFit="contain" alt="left-arrow" className={`cursor-pointer hover:scale-105 ${theme === 'dark' ? 'filter invert' : ''}`} />
-                <span className="mx-2">1</span>
-                <Image onClick={() => { }} src={images.rightArrow} width={42} objectFit="contain" alt="left-arrow" className={`cursor-pointer hover:scale-105 ${theme === 'dark' ? 'filter invert' : ''}`} />
+                <Image onClick={decreaseQty} src={images.leftArrow} width={42} objectFit="contain" alt="left-arrow" className={`cursor-pointer hover:scale-105 ${theme === 'dark' ? 'filter invert' : ''}`} />
+                <span className="mx-2">{qty}</span>
+                <Image onClick={increaseQty} src={images.rightArrow} width={42} objectFit="contain" alt="left-arrow" className={`cursor-pointer hover:scale-105 ${theme === 'dark' ? 'filter invert' : ''}`} />
               </div>
               <Button
                 btnName="Add to cart"
