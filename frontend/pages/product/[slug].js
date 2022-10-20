@@ -6,6 +6,7 @@ import axios from 'axios';
 import Button from '../../components/Button';
 import images from '../../assets';
 import { calculateDiscount } from '../../utils/calculateDiscount';
+import { useShopContext } from '../../hooks/useShopContext';
 
 const headers = {
   withCredentials: true,
@@ -17,6 +18,8 @@ const baseURL = process.env.NEXT_PUBLIC_BACKEND_API;
 
 const ProductDetail = () => {
   const [product, setProduct] = useState(null);
+  const { qty } = useShopContext();
+  console.log(qty);
   const [imageUrls, setImageUrls] = useState([]);
   const [mainImage, setMainImage] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -86,7 +89,7 @@ const ProductDetail = () => {
             <div className="flex gap-10 items-center mt-8">
               <div className="flex gap-2 items-center text-2xl">
                 <Image onClick={() => { }} src={images.leftArrow} width={42} objectFit="contain" alt="left-arrow" className={`cursor-pointer hover:scale-105 ${theme === 'dark' ? 'filter invert' : ''}`} />
-                <span className="mx-2">1</span>
+                <span className="mx-2">{qty}</span>
                 <Image onClick={() => { }} src={images.rightArrow} width={42} objectFit="contain" alt="left-arrow" className={`cursor-pointer hover:scale-105 ${theme === 'dark' ? 'filter invert' : ''}`} />
               </div>
               <Button
