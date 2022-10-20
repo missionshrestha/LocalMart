@@ -18,7 +18,7 @@ const baseURL = process.env.NEXT_PUBLIC_BACKEND_API;
 
 const ProductDetail = () => {
   const [product, setProduct] = useState(null);
-  const { qty, increaseQty, decreaseQty } = useShopContext();
+  const { qty, increaseQty, decreaseQty, onAdd } = useShopContext();
   console.log(qty);
   const [imageUrls, setImageUrls] = useState([]);
   const [mainImage, setMainImage] = useState(null);
@@ -31,7 +31,7 @@ const ProductDetail = () => {
     if (!router.isReady) return;
     const { slug } = router.query;
     axios.get(`${baseURL}/product/${slug}`, { headers }).then((response) => {
-      console.log(response.data);
+      // console.log(response.data);
       setProduct(response.data);
       setImageUrls(response.data.image_url);
       setMainImage(response.data.image_url[0].url.startsWith('https://') ? response.data.image_url[0].url : `https://${response.data.image_url[0].url}`);
@@ -96,6 +96,7 @@ const ProductDetail = () => {
                 btnName="Add to cart"
                 classStyles="text-xl rounded-xl py-3"
                 handleClick={() => {
+                  onAdd(product, qty);
                 // router.push(`${buttonLink}`);
                 }}
               />
