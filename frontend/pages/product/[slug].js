@@ -140,6 +140,7 @@ const ProductDetail = () => {
                 btnName="Add to cart"
                 classStyles="text-xl rounded-xl py-3"
                 handleClick={() => {
+                  onAdd(product, qty);
                   // router.push(`${buttonLink}`);
                 }}
               />

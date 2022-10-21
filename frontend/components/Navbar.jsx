@@ -6,6 +6,8 @@ import Link from 'next/link';
 import images from '../assets';
 import Button from './Button';
 import { useAuthContext } from '../hooks/useAuthContext';
+import Cart from './Cart';
+import { useShopContext } from '../hooks/useShopContext';
 
 const MenuItems = ({ isMobile, active, setActive }) => {
   const generateLink = (i) => {
@@ -38,6 +40,7 @@ const MenuItems = ({ isMobile, active, setActive }) => {
 
 const Navbar = () => {
   const { user } = useAuthContext();
+  const { showCart, setShowCart } = useShopContext();
   const { theme, setTheme } = useTheme();
   const [active, setActive] = useState('Home');
   const router = useRouter();
@@ -123,7 +126,7 @@ const Navbar = () => {
         </div>
         <div className="ml-3 flex flex-row items-center gap-3">
           <div>
-            <Image src={images.cart} className={theme === 'dark' ? 'filter invert' : ''} href="/" alt="cart" />
+            <Image onClick={() => { setShowCart(true); }} src={images.cart} className={theme === 'dark' ? 'filter invert' : ''} href="/" alt="cart" />
           </div>
           <div className="h-8 w-8 rounded-full bg-slate-50 flex justify-center items-center">
             { !user ? <Image src={images.profile} className={theme === 'dark' ? 'filter invert' : ''} href="/" alt="profile" /> : (
@@ -137,13 +140,15 @@ const Navbar = () => {
             )}
           </div>
         </div>
+        { showCart && <Cart />}
+        {/* <Cart /> */}
       </div>
 
       <div className="hidden md:flex flex-initial flex-row justify-end">
         <div className="flex items-center mr-2">
           <div className="ml-3 flex flex-row items-center gap-3">
             <div>
-              <Image src={images.cart} className={theme === 'dark' ? 'filter invert' : ''} href="/" alt="cart" />
+              <Image onClick={() => { setShowCart(true); }} src={images.cart} className={theme === 'dark' ? 'filter invert' : ''} href="/" alt="cart" />
             </div>
             <div>
               {/* <Image src={images.profile} className={theme === 'dark' ? 'filter invert' : ''} href="/" alt="profile" /> */}
@@ -159,6 +164,7 @@ const Navbar = () => {
             </div>
           </div>
         </div>
+        { showCart && <Cart childrenStyles="w-3/4" />}
       </div>
 
       {/* <div className="md:hidden flex">

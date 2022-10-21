@@ -5,5 +5,6 @@ import Category from './Category';
 import ProductCard from './ProductCard';
 import Input from './Input';
 import Notification from './Notification';
+import Cart from './Cart';
 
-export { Navbar, Footer, Banner, Category, ProductCard, Input, Notification };
+export { Navbar, Footer, Banner, Category, ProductCard, Input, Notification, Cart };

@@ -64,6 +64,7 @@ const Home = () => {
     axios.get(`${baseURL}/categories`, { headers }).then((response) => {
       setCategory(response.data);
     }).catch((e) => {
+      setCategory([{ tag_name: 'Error' }]);
       console.log(e);
     });
 
