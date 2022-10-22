@@ -18,7 +18,7 @@ const baseURL = process.env.NEXT_PUBLIC_BACKEND_API;
 
 const ProductDetail = () => {
   const [product, setProduct] = useState(null);
-  const { qty, increaseQty, decreaseQty, onAdd } = useShopContext();
+  const { qty, setQty, increaseQty, decreaseQty, onAdd } = useShopContext();
   console.log(qty);
   const [imageUrls, setImageUrls] = useState([]);
   const [mainImage, setMainImage] = useState(null);
@@ -96,7 +96,8 @@ const ProductDetail = () => {
                 btnName="Add to cart"
                 classStyles="text-xl rounded-xl py-3"
                 handleClick={() => {
-                  onAdd(product, qty);
+                  onAdd(product, qty, calculateDiscount(product.price, product.discount_percentage));
+                  setQty(1);
                 // router.push(`${buttonLink}`);
                 }}
               />
@@ -140,7 +141,8 @@ const ProductDetail = () => {
                 btnName="Add to cart"
                 classStyles="text-xl rounded-xl py-3"
                 handleClick={() => {
-                  onAdd(product, qty);
+                  onAdd(product, qty, calculateDiscount(product.price, product.discount_percentage));
+                  setQty(1);
                   // router.push(`${buttonLink}`);
                 }}
               />

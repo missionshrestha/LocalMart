@@ -21,18 +21,29 @@ export const ShopContextProvider = ({ children }) => {
   };
 
   // Add product to cart
-  const onAdd = (product, quantity) => {
+  const onAdd = (product, quantity, discountedPrice) => {
     // Check if the product is already there in the cart
     const exist = cartItems.find((item) => item.slug === product.slug);
     if (exist) {
-      setCartItems(cartItems.map((item) => (item.slug === product.slug ? { ...exist, quantity: exist.quantity + quantity } : item)));
+      setCartItems(cartItems.map((item) => (item.slug === product.slug ? { ...exist, quantity: exist.quantity + quantity, final_discounted_price: discountedPrice } : item)));
     } else {
-      setCartItems([...cartItems, { ...product, quantity }]);
+      setCartItems([...cartItems, { ...product, quantity, final_discounted_price: discountedPrice }]);
+    }
+  };
+
+  // remove product
+  const onRemove = (product) => {
+    // Check if the product is already there in the cart
+    const exist = cartItems.find((item) => item.slug === product.slug);
+    if (exist.quantity === 1) {
+      setCartItems(cartItems.filter((item) => item.slug !== product.slug));
+    } else {
+      setCartItems(cartItems.map((item) => (item.slug === product.slug ? { ...exist, quantity: exist.quantity - 1 } : item)));
     }
   };
 
   return (
-    <ShopContext.Provider value={{ qty, increaseQty, decreaseQty, showCart, setShowCart, cartItems, onAdd }}>
+    <ShopContext.Provider value={{ qty, setQty, increaseQty, decreaseQty, showCart, setShowCart, cartItems, onAdd, onRemove }}>
       {children}
     </ShopContext.Provider>
   );
