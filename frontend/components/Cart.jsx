@@ -3,9 +3,10 @@ import Image from 'next/image';
 import { useTheme } from 'next-themes';
 import { useShopContext } from '../hooks/useShopContext';
 import images from '../assets';
+import Button from './Button';
 
 const Cart = ({ childrenStyles }) => {
-  const { cartItems, setShowCart, onAdd, onRemove } = useShopContext();
+  const { cartItems, setShowCart, onAdd, onRemove, totalPrice } = useShopContext();
   const [firstImage, setFirstImage] = useState([]);
   const { theme } = useTheme();
 
@@ -70,6 +71,12 @@ const Cart = ({ childrenStyles }) => {
               </div>
             </div>
           ))
+        )}
+        {cartItems.length >= 1 && (
+          <div>
+            <h3 className="mt-8 font-bold text-mart-black-1">Sutotal: ${totalPrice}</h3>
+            <Button btnName="Purchase" classStyles="rounded-md mt-5 w-full py-3 border text-black bg-gray-100 xs:py-2" />
+          </div>
         )}
       </div>
     </div>

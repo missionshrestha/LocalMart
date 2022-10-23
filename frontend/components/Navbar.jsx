@@ -40,7 +40,7 @@ const MenuItems = ({ isMobile, active, setActive }) => {
 
 const Navbar = () => {
   const { user } = useAuthContext();
-  const { showCart, setShowCart } = useShopContext();
+  const { showCart, setShowCart, totalQuantities } = useShopContext();
   const { theme, setTheme } = useTheme();
   const [active, setActive] = useState('Home');
   const router = useRouter();
@@ -125,7 +125,8 @@ const Navbar = () => {
           </label>
         </div>
         <div className="ml-3 flex flex-row items-center gap-3">
-          <div>
+          <div className="relative">
+            {totalQuantities > 0 && <span className="absolute -top-2 -right-1 flex justify-center items-center rounded-full bg-red-500 w-4 h-4 text-sm text-white">{totalQuantities}</span>}
             <Image onClick={() => { setShowCart(true); }} src={images.cart} className={theme === 'dark' ? 'filter invert' : ''} href="/" alt="cart" />
           </div>
           <div className="h-8 w-8 rounded-full bg-slate-50 flex justify-center items-center">
@@ -147,7 +148,8 @@ const Navbar = () => {
       <div className="hidden md:flex flex-initial flex-row justify-end">
         <div className="flex items-center mr-2">
           <div className="ml-3 flex flex-row items-center gap-3">
-            <div>
+            <div className="relative">
+              {totalQuantities > 0 && <span className="absolute -top-2 -right-1 flex justify-center items-center rounded-full bg-red-500 w-4 h-4 text-sm text-white">{totalQuantities}</span>}
               <Image onClick={() => { setShowCart(true); }} src={images.cart} className={theme === 'dark' ? 'filter invert' : ''} href="/" alt="cart" />
             </div>
             <div>
