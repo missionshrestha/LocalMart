@@ -1,11 +1,12 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useDropzone } from 'react-dropzone';
 import Image from 'next/image';
 import { useTheme } from 'next-themes';
 import axios from 'axios';
-import { Input } from '../components';
+import { toast } from 'react-toastify';
+import { Input, Notification } from '../components';
 import Button from '../components/Button';
 import validateEmail from '../utils/validateEmail';
 import images from '../assets';
@@ -36,6 +37,18 @@ const SignUp = () => {
   const [validationMessage, setValidationMessage] = useState({ name: '', email: '', password: '' });
   const [error, setError] = useState(null);
   const { dispatch } = useAuthContext();
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user) {
+      const notify = () => toast('Logout first to signup');
+      notify();
+      setTimeout(() => {
+        router.push('/', undefined, { shallow: true });
+      }, 3000);
+    }
+  }, []);
+
   const handleValidation = (attribute, value) => {
     if (attribute === 'name') {
       if (value.length <= 2) {
@@ -182,6 +195,7 @@ const SignUp = () => {
             </div>
           </div>
         </div>
+        <Notification />
       </form>
     </div>
   );
