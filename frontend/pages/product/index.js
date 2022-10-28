@@ -36,6 +36,26 @@ const Product = () => {
     });
   }, []);
 
+  useEffect(() => {
+    if (products === null) {
+      return;
+    }
+    const sortedProducts = [...products];
+    switch (activeSelect) {
+      case 'Price (low to high)':
+        setProducts(sortedProducts.sort((a, b) => a.price - b.price));
+        break;
+      case 'Price (high to low)':
+        setProducts(sortedProducts.sort((a, b) => b.price - a.price));
+        break;
+      case 'Recently added':
+        setProducts(sortedProducts.sort((a, b) => b.id - a.id));
+        break;
+      default:
+        break;
+    }
+  }, [activeSelect]);
+
   if (isLoading) {
     return (
       <div className="h-screen flex items-center justify-center">
@@ -72,20 +92,23 @@ const Product = () => {
   };
   return (
     <div className="flex flex-col justify-end sm:px-4 p-12 pt-16">
-      <div className="mt-8 flexBetween sm:flex-col sm:items-start">
+      <div className="mt-8 flexBetween md:flex-col md:items-start sm:flex-col sm:items-start">
         <div>
           <p className="text-subtitle-blue italic font-semibold text-base md:mb-4 sm:mb-1 ml-4 xs:ml-0">- Our Products</p>
           <h1 className="font-montserrat dark:text-white text-mart-black-1 text-3xl minlg:text-4xl xs:text-xl font-bold ml-4 xs:ml-0">Explore our Products</h1>
         </div>
-        <div className="flex gap-2 items-center">
+        <div className="flex gap-2 md:w-full items-center md:mt-5 md:justify-end sm:flex-col sm:items-start">
           <SearchBar
             activeSelect={activeSelect}
             setActiveSelect={setActiveSelect}
             handleSearch={onHandleSearch}
             clearSearch={onClearSearch}
           />
-          <Image onClick={() => { }} src={images.leftArrow} width={32} objectFit="contain" alt="left-arrow" className={`cursor-pointer hover:scale-105 ${theme === 'dark' ? 'filter invert' : ''}`} />
-          <Image onClick={() => { }} src={images.rightArrow} width={32} objectFit="contain" alt="left-arrow" className={`cursor-pointer hover:scale-105 ${theme === 'dark' ? 'filter invert' : ''}`} />
+          <div className="flex gap-2 items-center">
+            <Image onClick={() => { }} src={images.leftArrow} width={32} objectFit="contain" alt="left-arrow" className={`cursor-pointer hover:scale-105 ${theme === 'dark' ? 'filter invert' : ''}`} />
+            <Image onClick={() => { }} src={images.rightArrow} width={32} objectFit="contain" alt="left-arrow" className={`cursor-pointer hover:scale-105 ${theme === 'dark' ? 'filter invert' : ''}`} />
+
+          </div>
         </div>
       </div>
       <div className="mt-3 w-full flex flex-wrap justify-start md:justify-center">
