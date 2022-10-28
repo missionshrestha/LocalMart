@@ -46,6 +46,10 @@ class UserCreate(BaseModel):
         orm_mode = True
 
 
+class Error(BaseModel):
+    msg: str
+
+
 class UserOut(BaseModel):
     id: int
     name: str
