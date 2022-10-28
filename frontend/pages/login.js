@@ -15,11 +15,13 @@ const Login = () => {
   const [validationMessage, setValidationMessage] = useState({ email: '', password: '' });
   // const [data, setData] = useState();
   const { dispatch } = useAuthContext();
+  const [error, setError] = useState(null);
 
   const handleLogin = () => {
     const formData = new FormData();
     formData.append('username', inputDetail.email);
     formData.append('password', inputDetail.password);
+    setError(null);
     axios({
       method: 'post',
       url: `${process.env.NEXT_PUBLIC_BACKEND_API}/login`,
@@ -39,7 +41,12 @@ const Login = () => {
           router.push('/', undefined, { shallow: true });
         }
       })
-      .catch((error) => { console.log(error); console.log(error.response); });
+      .catch((err) => {
+        if (err.response?.status === 403) {
+          setError(err.response.data.detail);
+        }
+        console.log(err); console.log(err.response);
+      });
   };
 
   const handleValidation = (attribute, value) => {
@@ -84,7 +91,10 @@ const Login = () => {
               <div className="mt-12 w-full flex justify-between">
                 <Button btnName="Login" handleClick={handleLogin} classStyles="rounded-md w-2/5 py-3 xs:py-2" />
 
-                <Button btnName="Create account" classStyles="rounded-md w-2/5 py-3 border text-black bg-gray-100 xs:py-2" handleClick={() => router.push('/signup', undefined, { shallow: true })} />
+                <Button btnName="Create account" classStyles="rounded-md w-2/5 py-3 border bg-gray-400 xs:py-2" handleClick={() => router.push('/signup', undefined, { shallow: true })} />
+              </div>
+              <div className="flex justify-center items-center mt-8">
+                { error !== null && <p className="absolute text-red-500">{error}</p>}
               </div>
               <div className="mt-8 flex w-full justify-center">
                 <span className="text-mart-gray-2 underline cursor-pointer">

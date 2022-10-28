@@ -74,8 +74,12 @@ const Home = () => {
       setIsLoading(false);
     }).catch((error) => {
       setProducts([]);
-      console.log(error.response.data.detail);
-      setErrorMessage(error.response.data.detail);
+      // console.log(error.response.data.detail);
+      if (error.response?.data) {
+        setErrorMessage(error.response.data.detail);
+      } else {
+        setErrorMessage('Something went wrong');
+      }
       setIsLoading(false);
     });
   }, []);
@@ -106,7 +110,7 @@ const Home = () => {
         </div>
         <div className="relative flex-1 max-w-full " ref={parentRef}>
           <div className="flex overflow-x-scroll no-scrollbar" ref={scrollRef}>
-            {category.map((item, i) => (
+            {category?.map((item, i) => (
               <Category key={i} logo={images.logoDark} title={item.tag_name} />
             ))}
 

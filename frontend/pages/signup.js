@@ -10,7 +10,7 @@ import { Input, Notification } from '../components';
 import Button from '../components/Button';
 import validateEmail from '../utils/validateEmail';
 import images from '../assets';
-import { useAuthContext } from '../hooks/useAuthContext';
+// import { useAuthContext } from '../hooks/useAuthContext';
 
 const validatePassword = (password) => (password.length >= 8);
 
@@ -36,7 +36,7 @@ const SignUp = () => {
   const [inputDetail, setInputDetail] = useState({ name: '', email: '', password: '' });
   const [validationMessage, setValidationMessage] = useState({ name: '', email: '', password: '' });
   const [error, setError] = useState(null);
-  const { dispatch } = useAuthContext();
+  // const { dispatch } = useAuthContext();
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'));
@@ -110,14 +110,20 @@ const SignUp = () => {
           if (response.status === 201) {
             // setData(response.data);
             // console.log(response.data);
-            localStorage.setItem('user', JSON.stringify(response.data));
-            dispatch({ type: 'LOGIN', payload: response.data });
-            setInputDetail({ name: '', email: '', password: '' });
+            // localStorage.setItem('user', JSON.stringify(response.data));
+            // dispatch({ type: 'LOGIN', payload: response.data });
+            // setInputDetail({ name: '', email: '', password: '' });
             setFileUrl(null);
-            router.push('/', undefined, { shallow: true });
+            const notify = () => toast('Account created successfully. You can login now');
+            notify();
+            setTimeout(() => {
+              router.push('/signup', undefined, { shallow: true });
+            }, 2000);
           }
         })
-        .catch((err) => { console.log(err); console.log(err.response); setError(err.message); });
+        .catch((err) => {
+          if (err.response?.status === 409) { setError(err.response.data.msg); } else { setError(err.message); }
+        });
 
       // console.log({ ...inputDetail, profile_img: fileUrl === null ? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3y9BKnIJ5AuNPL5RgemA_U_4s5IEzB_cFzQ&usqp=CAU' : fileUrl, phone_number: '' });
     } else if (inputDetail.name === '' && inputDetail.email === '' && inputDetail.password === '') {
@@ -166,7 +172,7 @@ const SignUp = () => {
                         {/* <p className="font-poppins dark:text-white text-book-black-1 font-semibold text-xl">JPG, PNG, GIF, SVG, WEBM.</p> */}
                         <div className="flex justify-center h-32 w-32 cursor-pointer">
                           {!fileUrl
-                            ? <Image src={images.upload} width={50} height={50} objectFit="contain" alt="file upload" className={`${theme === 'dark' ? 'filter invert' : ''}`} />
+                            ? <Image src={images.upload} width={50} height={50} objectFit="contain" alt="file upload" className={`${theme === 'light' ? 'filter invert' : ''}`} />
                             : <img src={fileUrl} alt="file upload" className="rounded-full object-cover" />}
                         </div>
                         {/* <p className="font-poppins dark:text-white text-book-black-1 font-semibold text-sm">Drag and Drop File</p>
@@ -185,7 +191,7 @@ const SignUp = () => {
                 <div className="mt-12 w-full flex justify-between">
                   <Button handleClick={handleSignUp} btnName="Create account" classStyles="rounded-md w-2/5 py-3 xs:py-2" />
 
-                  <Button btnName="Login" classStyles="rounded-md w-2/5 py-3 border text-black bg-gray-100 xs:py-2" handleClick={() => router.push('/login', undefined, { shallow: true })} />
+                  <Button btnName="Login" classStyles="rounded-md w-2/5 py-3 border text-black bg-gray-400 xs:py-2" handleClick={() => router.push('/login', undefined, { shallow: true })} />
                 </div>
                 <div className="flex justify-center items-center mt-8">
 

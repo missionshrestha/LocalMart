@@ -9,6 +9,7 @@ import Button from './Button';
 import { useAuthContext } from '../hooks/useAuthContext';
 import Cart from './Cart';
 import { useShopContext } from '../hooks/useShopContext';
+import { useLogout } from '../hooks/useLogout';
 
 const MenuItems = ({ isMobile, active, setActive }) => {
   const generateLink = (i) => {
@@ -47,7 +48,7 @@ const Navbar = () => {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [toggle, setToggle] = useState(false);
-
+  const { logout } = useLogout();
   useEffect(() => {
     setIsOpen(false);
   }, [router]);
@@ -57,7 +58,8 @@ const Navbar = () => {
       case 'My Profile':
         break;
       case 'Logout':
-        console.log(123781238712893);
+        logout();
+        router.push('/', undefined, { shallow: true });
         break;
       default:
         break;
@@ -144,10 +146,21 @@ const Navbar = () => {
         <div className="ml-3 flex flex-row items-center gap-3">
           <div className="relative">
             {totalQuantities > 0 && <span className="absolute -top-2 -right-1 flex justify-center items-center rounded-full bg-red-500 w-4 h-4 text-sm text-white">{totalQuantities}</span>}
-            <Image onClick={() => { setShowCart(true); }} src={images.cart} className={theme === 'dark' ? 'filter invert' : ''} href="/" alt="cart" />
+            <Image height={28} width={28} onClick={() => { setShowCart(true); }} src={images.cart} className={theme === 'dark' ? 'filter invert cursor-pointer' : 'cursor-pointer'} href="/" alt="cart" />
           </div>
-          <div className="h-8 w-8 rounded-full bg-slate-50 flex justify-center cursor-pointer items-center" onMouseEnter={() => setToggle(true)} onMouseLeave={() => setTimeout(() => setToggle(false), 1000)}>
-            { !user ? <Image src={images.profile} className={theme === 'dark' ? 'filter invert' : ''} href="/" alt="profile" /> : (
+          <div className="h-8 w-8 rounded-full bg-slate-50 dark:bg-black flex justify-center cursor-pointer items-center" onMouseEnter={() => setToggle(true)} onMouseLeave={() => setTimeout(() => setToggle(false), 1000)}>
+            { !user ? (
+              <Image
+                src={images.profile}
+                className={theme === 'dark' ? 'filter invert cursor-pointer' : 'cursor-pointer'}
+                href="/"
+                alt="profile"
+                onClick={() => {
+                  setActive('');
+                  router.push('/login');
+                }}
+              />
+            ) : (
               <div className="h-8 w-8 rounded-full relative">
                 <img src={user.profile_img} className="object-cover h-full rounded-full" />
                 {toggle && (
@@ -170,11 +183,22 @@ const Navbar = () => {
           <div className="ml-3 flex flex-row items-center gap-3">
             <div className="relative">
               {totalQuantities > 0 && <span className="absolute -top-2 -right-1 flex justify-center items-center rounded-full bg-red-500 w-4 h-4 text-sm text-white">{totalQuantities}</span>}
-              <Image onClick={() => { setShowCart(true); }} src={images.cart} className={theme === 'dark' ? 'filter invert' : ''} href="/" alt="cart" />
+              <Image height={28} width={28} onClick={() => { setShowCart(true); }} src={images.cart} className={theme === 'dark' ? 'filter invert cursor-pointer' : 'cursor-pointer'} href="/" alt="cart" />
             </div>
             <div onMouseEnter={() => setToggle(true)} onMouseLeave={() => setTimeout(() => setToggle(false), 1000)}>
               {/* <Image src={images.profile} className={theme === 'dark' ? 'filter invert' : ''} href="/" alt="profile" /> */}
-              { !user ? <Image src={images.profile} className={theme === 'dark' ? 'filter invert' : ''} href="/" alt="profile" /> : (
+              { !user ? (
+                <Image
+                  src={images.profile}
+                  className={theme === 'dark' ? 'filter invert cursor-pointer' : 'cursor-pointer'}
+                  href="/"
+                  alt="profile"
+                  onClick={() => {
+                    setActive('');
+                    router.push('/login');
+                  }}
+                />
+              ) : (
                 <div className="h-8 w-8 rounded-full relative">
                   <img src={user.profile_img} className="object-cover h-full rounded-full" />
                   {toggle && (
