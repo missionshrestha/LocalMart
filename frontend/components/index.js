@@ -6,5 +6,6 @@ import ProductCard from './ProductCard';
 import Input from './Input';
 import Notification from './Notification';
 import Cart from './Cart';
+import SearchBar from './SearchBar';
 
-export { Navbar, Footer, Banner, Category, ProductCard, Input, Notification, Cart };
+export { Navbar, Footer, Banner, Category, ProductCard, Input, Notification, Cart, SearchBar };

@@ -11,5 +11,6 @@ import instagram from './instagram.png';
 import telegram from './telegram.png';
 import twitter from './twitter.png';
 import upload from './upload.png';
+import search from './Search.png';
 
-export default { logo, logoDark, cross, menu, cart, profile, leftArrow, rightArrow, defaultProduct, instagram, telegram, twitter, upload };
+export default { logo, logoDark, cross, menu, cart, profile, leftArrow, rightArrow, defaultProduct, instagram, telegram, twitter, upload, search };
