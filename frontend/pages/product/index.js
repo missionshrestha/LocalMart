@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useTheme } from 'next-themes';
 import axios from 'axios';
+import { motion as m, AnimatePresence } from 'framer-motion';
 import images from '../../assets';
 import { ProductCard, SearchBar } from '../../components';
 import { calculateDiscount } from '../../utils/calculateDiscount';
@@ -111,24 +112,26 @@ const Product = () => {
           </div>
         </div>
       </div>
-      <div className="mt-3 w-full flex flex-wrap justify-start md:justify-center">
-        {products.length > 0 ? products.map((item, i) => (
-          <ProductCard
-            key={`product-${i}`}
-            product={{
-              id: item.id,
-              name: item.title,
-              price: item.price,
-              image: item.image_url[0].url.startsWith('https://') ? item.image_url[0].url : `https://${item.image_url[0].url}`,
-              discount: item.discount_percentage,
-              discountedPrice: calculateDiscount(item.price, item.discount_percentage),
-              slug: item.slug,
-              category: item.tags,
-            }}
-          />
+      <m.div layout className="mt-3 w-full flex flex-wrap justify-start md:justify-center">
+        {products.length > 0 ? products.map((item) => (
+          <AnimatePresence initial={false}>
+            <ProductCard
+              key={`product-${item.id}`}
+              product={{
+                id: item.id,
+                name: item.title,
+                price: item.price,
+                image: item.image_url[0].url.startsWith('https://') ? item.image_url[0].url : `https://${item.image_url[0].url}`,
+                discount: item.discount_percentage,
+                discountedPrice: calculateDiscount(item.price, item.discount_percentage),
+                slug: item.slug,
+                category: item.tags,
+              }}
+            />
+          </AnimatePresence>
         )) : errorMessage != null ? errorMessage : 'No Products Available'}
 
-      </div>
+      </m.div>
     </div>
   );
 };
