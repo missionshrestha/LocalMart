@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { useTheme } from 'next-themes';
 import Image from 'next/image';
 import Link from 'next/link';
+import { motion as m, AnimatePresence } from 'framer-motion';
 import images from '../assets';
 import Button from './Button';
 import { useAuthContext } from '../hooks/useAuthContext';
@@ -45,21 +46,34 @@ const Navbar = () => {
   const [active, setActive] = useState('Home');
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
+  const [toggle, setToggle] = useState(false);
 
   useEffect(() => {
     setIsOpen(false);
   }, [router]);
 
+  const handleClick = (item) => {
+    switch (item) {
+      case 'My Profile':
+        break;
+      case 'Logout':
+        console.log(123781238712893);
+        break;
+      default:
+        break;
+    }
+  };
+
   return (
     <nav className="flex justify-between w-full fixed z-20 py-4 px-10 flex-row border-b dark:bg-mart-dark bg-white dark:border-mart-dark-1 border-mart-gray-1">
 
       <div className="hidden md:flex ml-2">
-        {isOpen ? (<Image src={images.cross} objectFit="contain" width={35} height={35} alt="menu" onClick={() => { setIsOpen(false); }} className={theme === 'dark' ? 'filter invert' : ''} />) : (
-          <Image src={images.menu} objectFit="contain" width={35} height={35} alt="menu" onClick={() => { setIsOpen(true); }} className={theme === 'dark' ? 'filter invert' : ''} />
+        {isOpen ? (<Image src={images.cross} objectFit="contain" width={35} height={35} alt="menu" onClick={() => { setIsOpen(false); }} className={theme === 'dark' ? 'filter invert cursor-pointer' : 'cursor-pointer'} />) : (
+          <Image src={images.menu} objectFit="contain" width={35} height={35} alt="menu" onClick={() => { setIsOpen(true); }} className={theme === 'dark' ? 'filter invert cursor-pointer' : 'cursor-pointer'} />
         )}
-
-        {isOpen && (
-          <div className="fixed inset-0 top-65 dark:bg-mart-dark bg-white z-10 nav-h flex justify-between flex-col">
+        <AnimatePresence>
+          {isOpen && (
+          <m.div animate={{ opacity: 1, top: 65 }} initial={{ opacity: 0, top: 0 }} exit={{ opacity: 0 }} transition={{ type: 'spring', stiffness: 100, duration: 2, opacity: { ease: 'linear' } }} className="fixed inset-0 top-65 dark:bg-mart-dark bg-white z-10 nav-h flex justify-between flex-col">
             <div className="flex-1 p-4">
               <MenuItems active={active} setActive={setActive} isMobile />
             </div>
@@ -73,8 +87,9 @@ const Navbar = () => {
                 }}
               />
             </div>
-          </div>
-        )}
+          </m.div>
+          )}
+        </AnimatePresence>
       </div>
 
       <div className="flex flex-row justify-start md:justify-center">
@@ -96,8 +111,9 @@ const Navbar = () => {
           <Image src={images.menu} objectFit="contain" width={35} height={35} alt="menu" onClick={() => { setIsOpen(true); }} className={theme === 'dark' ? 'filter invert' : ''} />
         )}
 
-        {isOpen && (
-          <div className="fixed inset-0 top-65 dark:bg-mart-dark bg-white z-10 nav-h flex justify-between flex-col">
+        <AnimatePresence>
+          {isOpen && (
+          <m.div animate={{ opacity: 1, top: 65 }} initial={{ opacity: 0, top: 0 }} exit={{ opacity: 0 }} transition={{ type: 'spring', stiffness: 100, duration: 2, opacity: { ease: 'linear' } }} className="fixed inset-0 top-65 dark:bg-mart-dark bg-white z-10 nav-h flex justify-between flex-col">
             <div className="flex-1 p-4">
               <MenuItems active={active} setActive={setActive} isMobile />
             </div>
@@ -111,8 +127,9 @@ const Navbar = () => {
                 }}
               />
             </div>
-          </div>
-        )}
+          </m.div>
+          )}
+        </AnimatePresence>
       </div>
 
       <div className="md:hidden flex flex-initial flex-row justify-end">
@@ -129,14 +146,17 @@ const Navbar = () => {
             {totalQuantities > 0 && <span className="absolute -top-2 -right-1 flex justify-center items-center rounded-full bg-red-500 w-4 h-4 text-sm text-white">{totalQuantities}</span>}
             <Image onClick={() => { setShowCart(true); }} src={images.cart} className={theme === 'dark' ? 'filter invert' : ''} href="/" alt="cart" />
           </div>
-          <div className="h-8 w-8 rounded-full bg-slate-50 flex justify-center items-center">
+          <div className="h-8 w-8 rounded-full bg-slate-50 flex justify-center cursor-pointer items-center" onMouseEnter={() => setToggle(true)} onMouseLeave={() => setTimeout(() => setToggle(false), 1000)}>
             { !user ? <Image src={images.profile} className={theme === 'dark' ? 'filter invert' : ''} href="/" alt="profile" /> : (
               <div className="h-8 w-8 rounded-full relative">
                 <img src={user.profile_img} className="object-cover h-full rounded-full" />
-                <div className="hidden bg-black absolute top-10 w-full">
-                  <div>Profile</div>
-                  <div onClick={() => {}}>Logout</div>
-                </div>
+                {toggle && (
+                <m.div animate={{ opacity: 1, left: -128 }} initial={{ opacity: 0, left: -100 }} className="absolute top-full -left-32 right-9 w-40 mt-3 z-10 dark:bg-mart-black-2 bg-white border dark:border-mart-black-2 border-mart-gray-2 py-3 px-4 rounded-md">
+                  {
+                ['My Profile', 'Logout'].map((item) => (<p className="font-montserrat p-1 px-2 rounded-lg dark:text-white text-mart-black-1 font-semibold text-sm my-3 cursor-pointer hover:bg-logo-green" onClick={() => handleClick(item)} key={item}>{item}</p>))
+                  }
+                </m.div>
+                )}
               </div>
             )}
           </div>
@@ -152,15 +172,18 @@ const Navbar = () => {
               {totalQuantities > 0 && <span className="absolute -top-2 -right-1 flex justify-center items-center rounded-full bg-red-500 w-4 h-4 text-sm text-white">{totalQuantities}</span>}
               <Image onClick={() => { setShowCart(true); }} src={images.cart} className={theme === 'dark' ? 'filter invert' : ''} href="/" alt="cart" />
             </div>
-            <div>
+            <div onMouseEnter={() => setToggle(true)} onMouseLeave={() => setTimeout(() => setToggle(false), 1000)}>
               {/* <Image src={images.profile} className={theme === 'dark' ? 'filter invert' : ''} href="/" alt="profile" /> */}
               { !user ? <Image src={images.profile} className={theme === 'dark' ? 'filter invert' : ''} href="/" alt="profile" /> : (
                 <div className="h-8 w-8 rounded-full relative">
                   <img src={user.profile_img} className="object-cover h-full rounded-full" />
-                  <div className="hidden bg-black absolute top-10 w-full">
-                    <div>Profile</div>
-                    <div onClick={() => {}}>Logout</div>
-                  </div>
+                  {toggle && (
+                  <m.div animate={{ opacity: 1, left: -128 }} initial={{ opacity: 0, left: -100 }} className="absolute top-full -left-32 right-9 w-40 mt-3 z-10 dark:bg-mart-black-2 bg-white border dark:border-mart-black-2 border-mart-gray-2 py-3 px-4 rounded-md">
+                    {
+                ['My Profile', 'Logout'].map((item) => (<p className="font-montserrat p-1 px-2 rounded-lg dark:text-white text-mart-black-1 font-semibold text-sm my-3 cursor-pointer hover:bg-logo-green" onClick={() => handleClick(item)} key={item}>{item}</p>))
+                  }
+                  </m.div>
+                  )}
                 </div>
               )}
             </div>
