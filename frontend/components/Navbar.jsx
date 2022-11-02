@@ -174,7 +174,9 @@ const Navbar = () => {
             )}
           </div>
         </div>
-        { showCart && <Cart />}
+        <AnimatePresence>
+          { showCart && <Cart />}
+        </AnimatePresence>
         {/* <Cart /> */}
       </div>
 
@@ -213,7 +215,9 @@ const Navbar = () => {
             </div>
           </div>
         </div>
-        { showCart && <Cart childrenStyles="w-3/4" />}
+        <AnimatePresence>
+          { showCart && <Cart childrenStyles="w-3/4" />}
+        </AnimatePresence>
       </div>
 
       {/* <div className="md:hidden flex">

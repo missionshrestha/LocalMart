@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useTheme } from 'next-themes';
+import { motion as m } from 'framer-motion';
 import { useShopContext } from '../hooks/useShopContext';
 import images from '../assets';
 import Button from './Button';
@@ -19,12 +20,18 @@ const Cart = ({ childrenStyles }) => {
   }, []);
 
   return (
-    <div className="fixed font-montserrat right-0 left-0 top-0 h-screen w-full bg-mart-black-1 bg-opacity-75 flex justify-end" onClick={() => setShowCart(false)}>
-      <div className={`w-5/12 bg-white dark:bg-mart-black-4  px-10 py-10 opacity overflow-y-scroll relative ${childrenStyles}`} onClick={(e) => e.stopPropagation()}>
+    <m.div
+      animate={{ opacity: 1 }}
+      initial={{ opacity: 0 }}
+      exit={{ opacity: 0 }}
+      className="fixed font-montserrat right-0 left-0 top-0 h-screen w-full bg-mart-black-1 bg-opacity-75 flex justify-end"
+      onClick={() => setShowCart(false)}
+    >
+      <m.div initial={{ x: '50%' }} animate={{ x: '0%' }} transition={{ type: 'tween' }} exit={{ x: '50%' }} className={`w-5/12 bg-white dark:bg-mart-black-4  px-10 py-10 opacity overflow-y-scroll relative ${childrenStyles}`} onClick={(e) => e.stopPropagation()}>
         {cartItems.length < 1 && (
-        <div className="h-full flex justify-center items-center">
+        <m.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2 }} className="h-full flex justify-center items-center">
           <h1 className="text-2xl">You have more shopping to do.</h1>
-        </div>
+        </m.div>
         )}
         {cartItems.length > 0 && (
         <div className="font-bold text-3xl text-mart-black-1 dark:text-white">
@@ -78,8 +85,8 @@ const Cart = ({ childrenStyles }) => {
             <Button btnName="Purchase" classStyles="rounded-md mt-5 w-full py-3 border text-black bg-gray-100 xs:py-2" />
           </div>
         )}
-      </div>
-    </div>
+      </m.div>
+    </m.div>
   );
 };
 
