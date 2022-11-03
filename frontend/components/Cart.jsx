@@ -6,6 +6,23 @@ import { useShopContext } from '../hooks/useShopContext';
 import images from '../assets';
 import Button from './Button';
 
+// Animation Variants
+const card = {
+  hidden: { opacity: 0, scale: 0.8 },
+  show: { opacity: 1, scale: 1, transition: { delay: 0.3 } },
+};
+
+const cards = {
+  hidden: { opacity: 1 },
+  show: {
+    opacity: 1,
+    transition: {
+      delayChildren: 0.4, // NOTE
+      staggerChildren: 0.2,
+    },
+  },
+};
+
 const Cart = ({ childrenStyles }) => {
   const { cartItems, setShowCart, onAdd, onRemove, totalPrice } = useShopContext();
   const [firstImage, setFirstImage] = useState([]);
