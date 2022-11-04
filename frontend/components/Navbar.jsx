@@ -145,7 +145,7 @@ const Navbar = () => {
         </div>
         <div className="ml-3 flex flex-row items-center gap-3">
           <div className="relative">
-            {totalQuantities > 0 && <span className="absolute -top-2 -right-1 flex justify-center items-center rounded-full bg-red-500 w-4 h-4 text-sm text-white">{totalQuantities}</span>}
+            {totalQuantities > 0 && <m.span animate={{ scale: 1 }} initial={{ scale: 0 }} className="absolute -top-2 -right-1 flex justify-center items-center rounded-full bg-red-500 w-4 h-4 text-sm text-white">{totalQuantities}</m.span>}
             <Image height={28} width={28} onClick={() => { setShowCart(true); }} src={images.cart} className={theme === 'dark' ? 'filter invert cursor-pointer' : 'cursor-pointer'} href="/" alt="cart" />
           </div>
           <div className="h-8 w-8 rounded-full bg-slate-50 dark:bg-black flex justify-center cursor-pointer items-center" onMouseEnter={() => setToggle(true)} onMouseLeave={() => setTimeout(() => setToggle(false), 1000)}>
@@ -184,7 +184,7 @@ const Navbar = () => {
         <div className="flex items-center mr-2">
           <div className="ml-3 flex flex-row items-center gap-3">
             <div className="relative">
-              {totalQuantities > 0 && <span className="absolute -top-2 -right-1 flex justify-center items-center rounded-full bg-red-500 w-4 h-4 text-sm text-white">{totalQuantities}</span>}
+              {totalQuantities > 0 && <m.span animate={{ scale: 1 }} initial={{ scale: 0 }} className="absolute -top-2 -right-1 flex justify-center items-center rounded-full bg-red-500 w-4 h-4 text-sm text-white">{totalQuantities}</m.span>}
               <Image height={28} width={28} onClick={() => { setShowCart(true); }} src={images.cart} className={theme === 'dark' ? 'filter invert cursor-pointer' : 'cursor-pointer'} href="/" alt="cart" />
             </div>
             <div onMouseEnter={() => setToggle(true)} onMouseLeave={() => setTimeout(() => setToggle(false), 1000)}>
