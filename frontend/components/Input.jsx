@@ -2,7 +2,7 @@ import React from 'react';
 
 const Input = ({ inputType, title, placeholder, handleClick, hidePassword, value }) => (
   <div className="mt-10 w-full">
-    <p className="font-poppins dark:text-white text-mart-black-1 font-semibold text-xl">
+    <p className="font-montserrat dark:text-white text-mart-black-1 font-semibold text-xl">
       {title}
     </p>
     {inputType === 'number' ? (
