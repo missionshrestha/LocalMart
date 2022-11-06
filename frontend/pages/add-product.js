@@ -19,8 +19,6 @@ const headers = {
 
 const baseURL = process.env.NEXT_PUBLIC_BACKEND_API;
 
-const validatePassword = (password) => (password.length >= 8);
-
 const uploadToCloudinary = async (image) => {
   const data = new FormData();
   data.append('file', image);
@@ -80,18 +78,30 @@ const AddProduct = () => {
     }
 
     if (attribute === 'discount') {
-      if (value < 100) {
-        setValidationMessage({ ...validationMessage, discount: '' });
+      if (value > 0) {
+        if (value > 100) {
+          setValidationMessage({ ...validationMessage, discount: 'Should be less than 100' });
+        } else {
+          setValidationMessage({ ...validationMessage, discount: '' });
+        }
       } else {
-        setValidationMessage({ ...validationMessage, discount: 'Discount percentage should be less than 100' });
+        setValidationMessage({ ...validationMessage, discount: 'Discount percentage should be positive' });
       }
     }
 
-    if (attribute === 'password') {
-      if (validatePassword(value)) {
-        setValidationMessage({ ...validationMessage, password: '' });
+    if (attribute === 'price') {
+      if (value > 0) {
+        setValidationMessage({ ...validationMessage, price: '' });
       } else {
-        setValidationMessage({ ...validationMessage, password: 'Password should have at least 8 characters.' });
+        setValidationMessage({ ...validationMessage, price: 'Price should be positive' });
+      }
+    }
+
+    if (attribute === 'stock') {
+      if (value > 0) {
+        setValidationMessage({ ...validationMessage, stock: '' });
+      } else {
+        setValidationMessage({ ...validationMessage, stock: 'Stock should be positive' });
       }
     }
   };
@@ -118,7 +128,7 @@ const AddProduct = () => {
 
   const handleSubmit = () => {
     setError(null);
-    if (inputDetail.name !== '' && inputDetail.email !== '' && inputDetail.password !== '' && validationMessage.name === '' && validationMessage.email === '' && validationMessage.password === '') {
+    if (inputDetail.name !== '' && inputDetail.description !== '' && inputDetail.discount !== '' && inputDetail.stock !== '' && inputDetail.price !== '' && validationMessage.name === '' && validationMessage.description === '' && validationMessage.stock === '' && validationMessage.price === '' && validationMessage.discount === '') {
       const data = { ...inputDetail, phone_number: '', profile_img: fileUrl === null ? 'string' : fileUrl };
       axios({
         method: 'POST',
@@ -149,9 +159,9 @@ const AddProduct = () => {
         });
 
       // console.log({ ...inputDetail, profile_img: fileUrl === null ? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3y9BKnIJ5AuNPL5RgemA_U_4s5IEzB_cFzQ&usqp=CAU' : fileUrl, phone_number: '' });
-    } else if (inputDetail.name === '' && inputDetail.email === '' && inputDetail.password === '') {
+    } else if (inputDetail.name === '' || inputDetail.description === '' || inputDetail.discount === '' || inputDetail.stock === '' || inputDetail.price === '') {
       setError('Plese fill all the required fields.');
-    } else if (validationMessage.name !== '' || validationMessage.email !== '' || validationMessage.password !== '') {
+    } else if (validationMessage.name !== '' || validationMessage.description !== '' || validationMessage.stock !== '' || validationMessage.price !== '' || validationMessage.discount !== '') {
       setError('Resolve all validation error first.');
     } else {
       setError('Last One');
@@ -203,12 +213,14 @@ const AddProduct = () => {
                   </div>
                   <div>
                     <Input inputType="number" title="Stock" placeholder="Enter stock" handleClick={(e) => { setInputDetail({ ...inputDetail, stock: e.target.value }); handleValidation('stock', e.target.value); }} />
-                    {validationMessage.stock !== '' && <p className="absolute text-red-500">{validationMessage.password}</p>}
+                    {validationMessage.stock !== '' && <p className="absolute text-red-500">{validationMessage.stock}</p>}
                   </div>
                 </div>
                 <div className="flex gap-3 relative sm:flex-col sm:items-start">
-                  <Input inputType="number" title="Price" placeholder="Enter product price" handleClick={(e) => { setInputDetail({ ...inputDetail, price: e.target.value }); handleValidation('price', e.target.value); }} />
-                  {validationMessage.price !== '' && <p className="absolute text-red-500">{validationMessage.price}</p>}
+                  <div className="w-full">
+                    <Input inputType="number" title="Price" placeholder="Enter product price" handleClick={(e) => { setInputDetail({ ...inputDetail, price: e.target.value }); handleValidation('price', e.target.value); }} />
+                    {validationMessage.price !== '' && <p className="absolute text-red-500">{validationMessage.price}</p>}
+                  </div>
                   <div className="w-full">
                     <Input inputType="number" title="Discount Percent" placeholder="Enter Discount percentage" handleClick={(e) => { setInputDetail({ ...inputDetail, discount: e.target.value }); handleValidation('discount', e.target.value); }} />
                     {validationMessage.discount !== '' && <p className="absolute text-red-500">{validationMessage.discount}</p>}
