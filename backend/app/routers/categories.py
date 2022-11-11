@@ -22,15 +22,20 @@ def get_products(db: Session = Depends(get_db)):
 @router.get("/{tag}", response_model=Page[schemas.ProductGet])
 def search_products(tag: str | None = None, db: Session = Depends(get_db)):
     prod = db.query(models.Product).filter((models.Product.tags == tag)).all()
-    for i in range(len(prod)):
-        url_list = list(db.query(models.ImageURL.url).filter_by(id=prod[i].id))  # type: ignore
-        prod[i].image_url = url_list  # type: ignore
 
     if not prod:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Product does not exist",
         )
+
+    for i in range(len(prod)):
+        url_list = list(db.query(models.ImageURL.url).filter_by(id=prod[i].id))  # type: ignore
+        prod[i].image_url = url_list  # type: ignore
+
+        pf_list = list(db.query(models.ProductFeature.title, models.ProductFeature.description).filter_by(id=prod[i].id))  # type: ignore
+        prod[i].product_feature = pf_list  # type: ignore
+
     return paginate(prod)
 
 
