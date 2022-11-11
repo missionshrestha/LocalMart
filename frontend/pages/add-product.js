@@ -40,6 +40,7 @@ const AddProduct = () => {
   const [category, setCategory] = useState([]);
   const [fileUrl, setFileUrl] = useState([]);
   const [inputDetail, setInputDetail] = useState({ name: '', description: '', price: '', discount: '', stock: '' });
+  const [feature, setFeature] = useState([{ tite: '', description: '' }]);
   const [toggle, setToggle] = useState(false);
   const [activeSelect, setActiveSelect] = useState('None');
   const [validationMessage, setValidationMessage] = useState({ name: '', description: '', price: '', discount: '', stock: '' });
@@ -176,6 +177,23 @@ const AddProduct = () => {
     `
   ), [isDragActive, isDragAccept, isDragReject]);
 
+  const handleFeatureChange = (index, event) => {
+    const data = [...feature];
+    data[index][event.target.name] = event.target.value;
+    setFeature(data);
+  };
+
+  const addFields = () => {
+    const newfield = { tite: '', description: '' };
+    setFeature([...feature, newfield]);
+  };
+
+  const removeFields = (index) => {
+    const data = [...feature];
+    data.splice(index, 1);
+    setFeature(data);
+  };
+
   return (
     <div>
       <Head>
@@ -251,6 +269,32 @@ const AddProduct = () => {
                   <div className="mt-2 flex gap-2 justify-center items-center flex-wrap">
                     {fileUrl.map((imageSrc, idx) => <img key={idx} src={imageSrc} alt="file upload" height={100} width={100} className="object-cover" />)}
                   </div>
+                </div>
+                <div>
+                  <p className="font-montserrat dark:text-white text-mart-black-1 font-semibold text-xl">
+                    Features
+                  </p>
+                  {feature.map((input, index) => (
+                    <div key={index} className="flex justify-center items-center gap-3">
+                      <input
+                        className="dark:bg-mart-black-1 bg-white border dark:border-mart-black-1 border-mart-gray-2 rounded-lg w-full outline-none font-poppins dark:text-white text-mart-gray-2 text-base mt-4 px-4 py-3"
+                        name="title"
+                        placeholder="Title"
+                        value={input.title}
+                        onChange={(event) => handleFeatureChange(index, event)}
+                      />
+                      <input
+                        className="dark:bg-mart-black-1 bg-white border dark:border-mart-black-1 border-mart-gray-2 rounded-lg w-full outline-none font-poppins dark:text-white text-mart-gray-2 text-base mt-4 px-4 py-3"
+                        name="description"
+                        placeholder="Description"
+                        value={input.description}
+                        onChange={(event) => handleFeatureChange(index, event)}
+                      />
+                      {feature.length > 1
+                        && <Image onClick={() => removeFields(index)} src={images.cross} className="hover:cursor-pointer hover:scale-110" />}
+                    </div>
+                  ))}
+                  <Button handleClick={addFields} btnName="Add more..." classStyles="mt-2 rounded-md py-3 xs:py-2" />
                 </div>
                 <div className="mt-12 w-full flex justify-between">
                   <Button handleClick={handleSubmit} btnName="Create product" classStyles="rounded-md w-full py-3 xs:py-2" />
