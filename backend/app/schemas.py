@@ -2,6 +2,11 @@ from datetime import datetime
 from pydantic import BaseModel, EmailStr
 
 
+class ProductFeature(BaseModel):
+    title: str
+    description: str
+
+
 class ProductGet(BaseModel):
     id: int
     title: str
@@ -11,6 +16,7 @@ class ProductGet(BaseModel):
     price: float
     created_by: int
     image_url: list
+    product_feature: list[ProductFeature]
     tags: str
     slug: str
     discount_percentage: int
@@ -26,6 +32,7 @@ class ProductPost(BaseModel):
     description: str
     price: float
     image_url: list
+    product_feature: list[ProductFeature]
     tags: str
     discount_percentage: int | None
     stock: int

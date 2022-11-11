@@ -44,3 +44,12 @@ class ImageURL(Base):
     pk = Column(Integer, primary_key=True)
     id = Column(Integer, ForeignKey("product.id", ondelete="CASCADE"))
     url = Column(Text, nullable=False)
+
+
+class ProductFeature(Base):
+    __tablename__ = "productfeature"
+    # Just in case PK
+    pk = Column(Integer, primary_key=True)
+    id = Column(Integer, ForeignKey("product.id", ondelete="CASCADE"))
+    title = Column(Text, nullable=False)
+    description = Column(Text, nullable=False)
