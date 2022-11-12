@@ -39,11 +39,11 @@ const AddProduct = () => {
   const { theme } = useTheme();
   const [category, setCategory] = useState([]);
   const [fileUrl, setFileUrl] = useState([]);
-  const [inputDetail, setInputDetail] = useState({ name: '', description: '', price: '', discount: '', stock: '' });
+  const [inputDetail, setInputDetail] = useState({ title: '', description: '', price: '', discount_percentage: '', stock: '' });
   const [feature, setFeature] = useState([{ tite: '', description: '' }]);
   const [toggle, setToggle] = useState(false);
   const [activeSelect, setActiveSelect] = useState('None');
-  const [validationMessage, setValidationMessage] = useState({ name: '', description: '', price: '', discount: '', stock: '' });
+  const [validationMessage, setValidationMessage] = useState({ title: '', description: '', price: '', discount_percentage: '', stock: '' });
   const [error, setError] = useState(null);
   // const { dispatch } = useAuthContext();
 
@@ -70,23 +70,23 @@ const AddProduct = () => {
   }, []);
 
   const handleValidation = (attribute, value) => {
-    if (attribute === 'name') {
+    if (attribute === 'title') {
       if (value.length <= 2) {
-        setValidationMessage({ ...validationMessage, name: 'At least 3 character required' });
+        setValidationMessage({ ...validationMessage, title: 'At least 3 character required' });
       } else {
-        setValidationMessage({ ...validationMessage, name: '' });
+        setValidationMessage({ ...validationMessage, title: '' });
       }
     }
 
     if (attribute === 'discount') {
       if (value > 0) {
         if (value > 100) {
-          setValidationMessage({ ...validationMessage, discount: 'Should be less than 100' });
+          setValidationMessage({ ...validationMessage, discount_percentage: 'Should be less than 100' });
         } else {
-          setValidationMessage({ ...validationMessage, discount: '' });
+          setValidationMessage({ ...validationMessage, discount_percentage: '' });
         }
       } else {
-        setValidationMessage({ ...validationMessage, discount: 'Discount percentage should be positive' });
+        setValidationMessage({ ...validationMessage, discount_percentage: 'Discount percentage should be positive' });
       }
     }
 
@@ -127,42 +127,38 @@ const AddProduct = () => {
     },
   });
 
+  const validToken = () => JSON.parse(localStorage.getItem('user')).access_token;
+
   const handleSubmit = () => {
     setError(null);
-    if (inputDetail.name !== '' && inputDetail.description !== '' && inputDetail.discount !== '' && inputDetail.stock !== '' && inputDetail.price !== '' && validationMessage.name === '' && validationMessage.description === '' && validationMessage.stock === '' && validationMessage.price === '' && validationMessage.discount === '') {
-      const data = { ...inputDetail, phone_number: '', profile_img: fileUrl === null ? 'string' : fileUrl };
+    if (inputDetail.title !== '' && inputDetail.description !== '' && inputDetail.discount_percentage !== '' && inputDetail.stock !== '' && inputDetail.price !== '' && validationMessage.title === '' && validationMessage.description === '' && validationMessage.stock === '' && validationMessage.price === '' && validationMessage.discount_percentage === '') {
+      const data = { ...inputDetail, product_feature: feature, image_url: fileUrl, tags: activeSelect, is_used: false };
       axios({
         method: 'POST',
-        url: `${process.env.NEXT_PUBLIC_BACKEND_API}/user/`,
+        url: `${process.env.NEXT_PUBLIC_BACKEND_API}/product/`,
         data: JSON.stringify(data),
         headers: {
           accept: 'application/json',
+          Authorization: `Bearer ${validToken()}`,
           'Content-Type': 'application/json',
         },
       })
         .then((response) => {
-          if (response.status === 201) {
-            // setData(response.data);
-            // console.log(response.data);
-            // localStorage.setItem('user', JSON.stringify(response.data));
-            // dispatch({ type: 'LOGIN', payload: response.data });
-            // setInputDetail({ name: '', email: '', password: '' });
-            setFileUrl(null);
-            const notify = () => toast('Account created successfully. You can login now');
-            notify();
-            setTimeout(() => {
-              router.push('/signup', undefined, { shallow: true });
-            }, 2000);
-          }
+          const notify = () => toast('Product Created successfully.');
+          notify();
+          setTimeout(() => {
+            router.push(`/product/${inputDetail.title.toLowerCase().trim().split(' ').join('-')}`, undefined, { shallow: true });
+          }, 1000);
+          setFileUrl(null);
         })
         .catch((err) => {
-          if (err.response?.status === 409) { setError(err.response.data.msg); } else { setError(err.message); }
+          if (err.response?.status === 401) { setError(err.response.data.detail); } else { setError(err.message); }
         });
 
       // console.log({ ...inputDetail, profile_img: fileUrl === null ? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3y9BKnIJ5AuNPL5RgemA_U_4s5IEzB_cFzQ&usqp=CAU' : fileUrl, phone_number: '' });
-    } else if (inputDetail.name === '' || inputDetail.description === '' || inputDetail.discount === '' || inputDetail.stock === '' || inputDetail.price === '') {
+    } else if (inputDetail.title === '' || inputDetail.description === '' || inputDetail.discount_percentage === '' || inputDetail.stock === '' || inputDetail.price === '') {
       setError('Plese fill all the required fields.');
-    } else if (validationMessage.name !== '' || validationMessage.description !== '' || validationMessage.stock !== '' || validationMessage.price !== '' || validationMessage.discount !== '') {
+    } else if (validationMessage.title !== '' || validationMessage.description !== '' || validationMessage.stock !== '' || validationMessage.price !== '' || validationMessage.discount_percentage !== '') {
       setError('Resolve all validation error first.');
     } else {
       setError('Last One');
@@ -208,9 +204,9 @@ const AddProduct = () => {
               <p className="text-subtitle-blue italic font-semibold text-base md:mb-4 sm:mb-1 ml-4 xs:ml-0">- Product</p>
               <h1 className="font-montserrat dark:text-white text-mart-black-1 text-3xl minlg:text-4xl xs:text-xl font-bold ml-4 xs:ml-0">Add product</h1>
               <div className="m-auto w-2/5 md:w-3/5 sm:w-4/5 xs:w-full">
-                <Input inputType="input" title="Name" placeholder="Enter product name" handleClick={(e) => { setInputDetail({ ...inputDetail, name: e.target.value }); handleValidation('name', e.target.value); }} />
-                {validationMessage.name !== '' && <p className="absolute text-red-500">{validationMessage.name}</p>}
-                <Input inputType="textarea" title="Description" placeholder="Enter your password" handleClick={(e) => { setInputDetail({ ...inputDetail, description: e.target.value }); handleValidation('description', e.target.value); }} />
+                <Input inputType="input" title="Name" placeholder="Enter product name" handleClick={(e) => { setInputDetail({ ...inputDetail, title: e.target.value }); handleValidation('title', e.target.value); }} />
+                {validationMessage.title !== '' && <p className="absolute text-red-500">{validationMessage.title}</p>}
+                <Input inputType="textarea" title="Description" placeholder="Enter product description" handleClick={(e) => { setInputDetail({ ...inputDetail, description: e.target.value }); handleValidation('description', e.target.value); }} />
                 {validationMessage.description !== '' && <p className="absolute text-red-500">{validationMessage.description}</p>}
                 <div className="flex gap-3 justify-between items-center sm:flex-col sm:items-start">
                   <div className="mt-10">
@@ -240,8 +236,8 @@ const AddProduct = () => {
                     {validationMessage.price !== '' && <p className="absolute text-red-500">{validationMessage.price}</p>}
                   </div>
                   <div className="w-full">
-                    <Input inputType="number" title="Discount Percent" placeholder="Enter Discount percentage" handleClick={(e) => { setInputDetail({ ...inputDetail, discount: e.target.value }); handleValidation('discount', e.target.value); }} />
-                    {validationMessage.discount !== '' && <p className="absolute text-red-500">{validationMessage.discount}</p>}
+                    <Input inputType="number" title="Discount Percent" placeholder="Enter Discount percentage" handleClick={(e) => { setInputDetail({ ...inputDetail, discount_percentage: e.target.value }); handleValidation('discount', e.target.value); }} />
+                    {validationMessage.discount !== '' && <p className="absolute text-red-500">{validationMessage.discount_percentage}</p>}
                   </div>
                 </div>
                 <div className="mt-16">
@@ -267,7 +263,7 @@ const AddProduct = () => {
                   )} */}
                   </div>
                   <div className="mt-2 flex gap-2 justify-center items-center flex-wrap">
-                    {fileUrl.map((imageSrc, idx) => <img key={idx} src={imageSrc} alt="file upload" height={100} width={100} className="object-cover" />)}
+                    {fileUrl?.map((imageSrc, idx) => <img key={idx} src={imageSrc} alt="file upload" height={100} width={100} className="object-cover" />)}
                   </div>
                 </div>
                 <div>
@@ -276,20 +272,22 @@ const AddProduct = () => {
                   </p>
                   {feature.map((input, index) => (
                     <div key={index} className="flex justify-center items-center gap-3">
-                      <input
-                        className="dark:bg-mart-black-1 bg-white border dark:border-mart-black-1 border-mart-gray-2 rounded-lg w-full outline-none font-poppins dark:text-white text-mart-gray-2 text-base mt-4 px-4 py-3"
-                        name="title"
-                        placeholder="Title"
-                        value={input.title}
-                        onChange={(event) => handleFeatureChange(index, event)}
-                      />
-                      <input
-                        className="dark:bg-mart-black-1 bg-white border dark:border-mart-black-1 border-mart-gray-2 rounded-lg w-full outline-none font-poppins dark:text-white text-mart-gray-2 text-base mt-4 px-4 py-3"
-                        name="description"
-                        placeholder="Description"
-                        value={input.description}
-                        onChange={(event) => handleFeatureChange(index, event)}
-                      />
+                      <div className="flex justify-center items-center gap-3 sm:flex-col">
+                        <input
+                          className="dark:bg-mart-black-1 bg-white border dark:border-mart-black-1 border-mart-gray-2 rounded-lg w-full outline-none font-poppins dark:text-white text-mart-gray-2 text-base mt-4 px-4 py-3"
+                          name="title"
+                          placeholder="Title"
+                          value={input.title}
+                          onChange={(event) => handleFeatureChange(index, event)}
+                        />
+                        <input
+                          className="dark:bg-mart-black-1 bg-white border dark:border-mart-black-1 border-mart-gray-2 rounded-lg w-full outline-none font-poppins dark:text-white text-mart-gray-2 text-base mt-4 px-4 py-3"
+                          name="description"
+                          placeholder="Description"
+                          value={input.description}
+                          onChange={(event) => handleFeatureChange(index, event)}
+                        />
+                      </div>
                       {feature.length > 1
                         && <Image onClick={() => removeFields(index)} src={images.cross} className="hover:cursor-pointer hover:scale-110" />}
                     </div>

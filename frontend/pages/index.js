@@ -145,7 +145,7 @@ const Home = () => {
                   id: item.id,
                   name: item.title,
                   price: item.price,
-                  image: item.image_url[0].url.startsWith('https://') ? item.image_url[0].url : `https://${item.image_url[0].url}`,
+                  image: item.image_url[0].url.startsWith('https://') || item.image_url[0].url.startsWith('http://') ? item.image_url[0].url : `https://${item.image_url[0].url}`,
                   discount: item.discount_percentage,
                   discountedPrice: calculateDiscount(item.price, item.discount_percentage),
                   slug: item.slug,
