@@ -143,7 +143,7 @@ const AddProduct = () => {
           'Content-Type': 'application/json',
         },
       })
-        .then((response) => {
+        .then(() => {
           const notify = () => toast('Product Created successfully.');
           notify();
           setTimeout(() => {

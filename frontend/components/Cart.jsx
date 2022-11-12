@@ -31,7 +31,7 @@ const Cart = ({ childrenStyles }) => {
   useEffect(() => {
     if (cartItems.length > 0) {
       cartItems.forEach((item) => {
-        setFirstImage([...firstImage, item.image_url[0].url.startsWith('https://') ? item.image_url[0].url : `https://${item.image_url[0].url}`]);
+        setFirstImage([...firstImage, item.image_url[0].url.startsWith('https://') || item.image_url[0].url.startsWith('http://') ? item.image_url[0].url : `https://${item.image_url[0].url}`]);
       });
     }
   }, []);
@@ -63,6 +63,7 @@ const Cart = ({ childrenStyles }) => {
                   {item.image_url && item.image_url.length > 0
                   && (
                   <Image
+                    key={item.id}
                     src={firstImage[idx]}
                     onError={() => {
                       const arr = [...firstImage];

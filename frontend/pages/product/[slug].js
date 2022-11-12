@@ -53,7 +53,7 @@ const ProductDetail = () => {
     setMainImage(newImageUrls[0].url);
   };
 
-  if (!product) {
+  if (isLoading || !product) {
     return (
       <div className="h-screen flex items-center justify-center">
         Loading . . .
@@ -111,7 +111,7 @@ const ProductDetail = () => {
           <div className="basis-1/4 flex flex-col flex-wrap gap-2 overflow overflow-x-scroll no-scrollbar">
             {product.image_url.map((item, idx) => (
               <div key={idx} onClick={() => { setSelected(idx); setMainImage(imageUrls[idx].url); }} className={`${selected === idx ? 'border-2 border-logo-green rounded-2xl' : ''} bg-white relative w-full h-1/3 hover:border-2 cursor-pointer`}>
-                <Image className="rounded-2xl" src={imageUrls[idx].url.startsWith('https://') ? imageUrls[idx].url : `https://${imageUrls[idx].url}`} onError={() => { updater(idx); }} layout="fill" objectFit="contain" />
+                <Image className="rounded-2xl" src={imageUrls[idx].url.startsWith('https://') || imageUrls[idx].url.startsWith('http://') ? imageUrls[idx].url : `https://${imageUrls[idx].url}`} onError={() => { updater(idx); }} layout="fill" objectFit="contain" />
               </div>
             ))}
           </div>
