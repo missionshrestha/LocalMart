@@ -45,3 +45,24 @@ def get_user(id: int, db: Session = Depends(get_db)):
         )
 
     return user
+
+
+@router.get("/{usr_id}/product", response_model=list[schemas.ProductGet])
+def get_products(usr_id: int, db: Session = Depends(get_db)):
+    q = db.query(models.Product).filter(models.Product.created_by == usr_id).all()
+    if not q:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Product does not exist",
+        )
+    for i in range(len(q)):
+        url_list = list(db.query(models.ImageURL.url).filter_by(id=q[i].id))
+        product_feature = list(
+            db.query(
+                models.ProductFeature.title, models.ProductFeature.description
+            ).filter_by(id=q[i].id)
+        )
+        q[i].image_url = url_list
+        q[i].product_feature = product_feature
+
+    return q
