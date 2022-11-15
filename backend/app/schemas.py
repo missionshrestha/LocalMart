@@ -70,6 +70,7 @@ class UserOut(BaseModel):
 
 
 class Login(BaseModel):
+    id: int
     access_token: str
     token_type: str
     name: str
