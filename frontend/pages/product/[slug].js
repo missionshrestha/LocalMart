@@ -18,6 +18,7 @@ const baseURL = process.env.NEXT_PUBLIC_BACKEND_API;
 
 const ProductDetail = () => {
   const [product, setProduct] = useState(null);
+  const [creator, setCreator] = useState(null);
   const { qty, setQty, increaseQty, decreaseQty, onAdd } = useShopContext();
   console.log(qty);
   const [imageUrls, setImageUrls] = useState([]);
@@ -41,6 +42,16 @@ const ProductDetail = () => {
       setIsLoading(false);
     });
   }, [router.isReady]);
+
+  useEffect(() => {
+    if (product) {
+      axios.get(`${baseURL}/user/${product.created_by}`, { headers }).then((response) => {
+        setCreator(response.data);
+      }).catch((error) => {
+        console.log(error);
+      });
+    }
+  }, [product]);
 
   const updater = (idx) => {
     const newImageUrls = imageUrls.map((im, index) => {
@@ -86,11 +97,29 @@ const ProductDetail = () => {
                 <div className="font-semibold">${calculateDiscount(product.price, product.discount_percentage)}</div>
               </div>
             </div>
+            {creator
+            && (
+            <div className="font-montserrat mt-4">
+              <div className="flex gap-3 items-center">
+                <span>Added By:</span>
+                <div className="h-8 w-8 rounded-full relative">
+                  <img src={creator.profile_img} className="object-cover h-full rounded-full" />
+                </div>
+                <span>{creator.name}</span>
+              </div>
+              <div>
+                Contact no: {creator.phone_number}
+              </div>
+              <div className="mt-3 font-bold">
+                Stock: {product.stock}
+              </div>
+            </div>
+            )}
             <div className="flex gap-10 items-center mt-8">
               <div className="flex gap-2 items-center text-2xl">
                 <Image onClick={decreaseQty} src={images.leftArrow} width={42} objectFit="contain" alt="left-arrow" className={`cursor-pointer hover:scale-105 ${theme === 'dark' ? 'filter invert' : ''}`} />
                 <span className="mx-2">{qty}</span>
-                <Image onClick={increaseQty} src={images.rightArrow} width={42} objectFit="contain" alt="left-arrow" className={`cursor-pointer hover:scale-105 ${theme === 'dark' ? 'filter invert' : ''}`} />
+                <Image onClick={() => qty < product.stock && increaseQty()} src={images.rightArrow} width={42} objectFit="contain" alt="left-arrow" className={`cursor-pointer hover:scale-105 ${theme === 'dark' ? 'filter invert' : ''}`} />
               </div>
               <Button
                 btnName="Add to cart"
@@ -131,11 +160,29 @@ const ProductDetail = () => {
                 <div className="font-semibold">${calculateDiscount(product.price, product.discount_percentage)}</div>
               </div>
             </div>
+            {creator
+            && (
+            <div className="font-montserrat mt-4">
+              <div className="flex gap-3 items-center">
+                <span>Added By:</span>
+                <div className="h-8 w-8 rounded-full relative">
+                  <img src={creator.profile_img} className="object-cover h-full rounded-full" />
+                </div>
+                <span>{creator.name}</span>
+              </div>
+              <div>
+                Contact no: {creator.phone_number}
+              </div>
+              <div className="mt-3 font-bold">
+                Stock: {product.stock}
+              </div>
+            </div>
+            )}
             <div className="flex gap-10 items-center mt-8">
               <div className="flex gap-2 items-center text-2xl">
                 <Image onClick={decreaseQty} src={images.leftArrow} width={42} objectFit="contain" alt="left-arrow" className={`cursor-pointer hover:scale-105 ${theme === 'dark' ? 'filter invert' : ''}`} />
                 <span className="mx-2">{qty}</span>
-                <Image onClick={increaseQty} src={images.rightArrow} width={42} objectFit="contain" alt="left-arrow" className={`cursor-pointer hover:scale-105 ${theme === 'dark' ? 'filter invert' : ''}`} />
+                <Image onClick={() => qty < product.stock && increaseQty()} src={images.rightArrow} width={42} objectFit="contain" alt="left-arrow" className={`cursor-pointer hover:scale-105 ${theme === 'dark' ? 'filter invert' : ''}`} />
               </div>
               <Button
                 btnName="Add to cart"
@@ -156,10 +203,10 @@ const ProductDetail = () => {
           <h1 className="text-4xl font-bold">Explore the Features</h1>
         </div>
         <div className="flex flex-col gap-10 sm:mt-10">
-          {[{ title: 'Natural', subtitle: 'We are using natural ingredients only when creating our products.' }, { title: 'Natural', subtitle: 'We are using natural ingredients only when creating our products.' }].map(() => (
+          {product.product_feature.map((item) => (
             <div>
-              <h1 className="font-semibold text-xl">Natural</h1>
-              <h2 className="mt-2">We are using natural ingredients only<br /> when creating our products.</h2>
+              <h1 className="font-semibold text-xl">{item.title}</h1>
+              <h2 className="mt-2">{item.description}</h2>
             </div>
           ))}
         </div>
