@@ -38,8 +38,9 @@ class ProductPost(BaseModel):
     stock: int
     is_used: bool
 
-    class Config:
-        orm_mode = True
+
+class ProductUpdate(ProductPost):
+    pass
 
 
 class UserCreate(BaseModel):
@@ -48,9 +49,6 @@ class UserCreate(BaseModel):
     password: str
     phone_number: str
     profile_img: str
-
-    class Config:
-        orm_mode = True
 
 
 class Error(BaseModel):
