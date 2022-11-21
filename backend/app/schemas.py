@@ -43,9 +43,9 @@ class ProductUpdate(BaseModel):
     title: str
     description: str
     price: float
-    # image_url: list
-    # product_feature: list[ProductFeature]
-    # tags: str
+    image_url: list
+    product_feature: list[ProductFeature]
+    tags: str
     discount_percentage: int | None
     stock: int
     is_used: bool

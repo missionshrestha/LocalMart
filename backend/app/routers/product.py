@@ -35,7 +35,7 @@ def add_product(
     db: Session = Depends(get_db),
     current_user=Depends(oauth2.get_current_user),
 ):
-    # could not modify new_product;
+    # can not modify new_product
     with_current_user = new_product.dict().copy()
     with_current_user.update(
         {"created_by": current_user.id, "slug": slugify(new_product.title)}
@@ -76,16 +76,17 @@ def update_product(
     db: Session = Depends(get_db),
     current_user=Depends(oauth2.get_current_user),
 ):
-    # could not modify new_product;
-    # with_current_user = updated_product.dict().copy()
-    # with_current_user.update(
-    #     {"created_by": current_user.id, "slug": slugify(updated_product.title)}  # type: ignore
-    # )
-    # image_url: list = with_current_user["image_url"]
-    # product_feature: list = with_current_user["product_feature"]
-    # with_current_user.pop("image_url")
-    # with_current_user.pop("product_feature")
+    # can not modify updated_product
+    up_copy = updated_product.dict().copy()
 
+    # Some formatting stuff
+    image_url_list = up_copy.pop("image_url")
+    appended_image_url_list = {}
+    product_feature = up_copy.pop("product_feature")
+    for url in image_url_list:
+        appended_image_url_list["url"] = url
+
+    # Query for exception
     get_product = db.query(models.Product).filter(models.Product.id == id).first()
 
     if get_product == None:
@@ -100,34 +101,20 @@ def update_product(
             detail="Not Authorized to perform requested action",
         )
 
-    print(updated_product.dict())
+    # Into the database
     db.query(models.Product).filter(models.Product.id == id).update(
-        updated_product.dict(),
+        up_copy,
+        synchronize_session=False,
+    )
+    db.query(models.ImageURL).filter(models.ImageURL.id == id).update(
+        appended_image_url_list,
+        synchronize_session=False,
+    )
+    db.query(models.ProductFeature).filter(models.ProductFeature.id == id).update(
+        *product_feature,
         synchronize_session=False,
     )
     db.commit()
-
-    # final_product = models.Product(**with_current_user)
-    # db.add(final_product)
-    # db.commit()
-    # db.refresh(final_product)
-
-    # for url in image_url:
-    #     format_img_url = {"id": final_product.id, "url": url}
-    #     new_url = models.ImageURL(**format_img_url)
-    #     db.add(new_url)
-    #     db.commit()
-
-    # for pf in product_feature:
-    #     format_product_feature = {
-    #         "id": final_product.id,
-    #         "title": pf["title"],
-    #         "description": pf["description"],
-    #     }
-    #     new_pf = models.ProductFeature(**format_product_feature)
-    #     db.add(new_pf)
-    #     db.commit()
-
     return "Product updated!"
 
 
