@@ -36,16 +36,16 @@ def add_product(
     current_user=Depends(oauth2.get_current_user),
 ):
     # could not modify new_product;
-    add_current_user = new_product.dict().copy()
-    add_current_user.update(
+    with_current_user = new_product.dict().copy()
+    with_current_user.update(
         {"created_by": current_user.id, "slug": slugify(new_product.title)}
     )
-    image_url: list = add_current_user["image_url"]
-    product_feature: list = add_current_user["product_feature"]
-    add_current_user.pop("image_url")
-    add_current_user.pop("product_feature")
+    image_url: list = with_current_user["image_url"]
+    product_feature: list = with_current_user["product_feature"]
+    with_current_user.pop("image_url")
+    with_current_user.pop("product_feature")
 
-    new_product = models.Product(**add_current_user)
+    new_product = models.Product(**with_current_user)
     db.add(new_product)
     db.commit()
     db.refresh(new_product)
@@ -67,6 +67,94 @@ def add_product(
         db.commit()
 
     return "Product added!"
+
+
+@router.put("/{id}")
+def update_product(
+    id: int,
+    updated_product: schemas.ProductUpdate,
+    db: Session = Depends(get_db),
+    current_user=Depends(oauth2.get_current_user),
+):
+    # could not modify new_product;
+    with_current_user = updated_product.dict().copy()
+    with_current_user.update(
+        {"created_by": current_user.id, "slug": slugify(updated_product.title)}  # type: ignore
+    )
+    # image_url: list = with_current_user["image_url"]
+    # product_feature: list = with_current_user["product_feature"]
+    # with_current_user.pop("image_url")
+    # with_current_user.pop("product_feature")
+
+    get_product = db.query(models.Product).filter(models.Product.id == id).first()
+
+    if get_product == None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Product with id {id} does not exist",
+        )
+
+    if get_product.created_by != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not Authorized to perform requested action",
+        )
+
+    # print(type(with_current_user))
+    db.query(models.Product).filter(models.Product.id == id).update(
+        {"title": "updated temp"},
+        synchronize_session=False,
+    )
+    db.commit()
+
+    # final_product = models.Product(**with_current_user)
+    # db.add(final_product)
+    # db.commit()
+    # db.refresh(final_product)
+
+    # for url in image_url:
+    #     format_img_url = {"id": final_product.id, "url": url}
+    #     new_url = models.ImageURL(**format_img_url)
+    #     db.add(new_url)
+    #     db.commit()
+
+    # for pf in product_feature:
+    #     format_product_feature = {
+    #         "id": final_product.id,
+    #         "title": pf["title"],
+    #         "description": pf["description"],
+    #     }
+    #     new_pf = models.ProductFeature(**format_product_feature)
+    #     db.add(new_pf)
+    #     db.commit()
+
+    return "Product updated!"
+
+
+@router.delete("/{id}")
+def delete_product(
+    id: int,
+    db: Session = Depends(get_db),
+    current_user=Depends(oauth2.get_current_user),
+):
+    get_product = db.query(models.Product).filter(models.Product.id == id).first()
+
+    if get_product == None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Product with id {id} does not exist",
+        )
+
+    if get_product.created_by != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not Authorized to perform requested action",
+        )
+    db.query(models.Product).filter(models.Product.id == id).delete(
+        synchronize_session=False
+    )
+    db.commit()
+    return "Product deleted!"
 
 
 @router.get("/{slug}", response_model=schemas.ProductGet)
