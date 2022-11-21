@@ -53,3 +53,11 @@ class ProductFeature(Base):
     id = Column(Integer, ForeignKey("product.id", ondelete="CASCADE"))
     title = Column(Text, nullable=False)
     description = Column(Text, nullable=False)
+
+
+class Order(Base):
+    __tablename__ = "order"
+    # Just in case PK
+    pk = Column(Integer, primary_key=True)
+    product_id = Column(Integer, ForeignKey("product.id", ondelete="CASCADE"))
+    user_id = Column(Integer, ForeignKey("user.id", ondelete="CASCADE"))

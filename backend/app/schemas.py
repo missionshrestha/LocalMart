@@ -86,3 +86,7 @@ class Login(BaseModel):
 
 class TokenData(BaseModel):
     id: str | None
+
+
+class OrderPost(BaseModel):
+    product_id: int
