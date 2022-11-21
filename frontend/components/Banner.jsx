@@ -13,6 +13,8 @@ const Banner = ({ parentStyles, childStyles, name, subtitle, buttonLink }) => {
       <p className={`font-bold text-5xl font-montserrat leading-70 ${childStyles}`}>
         {name}
       </p>
+      {name.length > 0
+      && (
       <Button
         btnName="Shop Now"
         classStyles="text-xl rounded-xl mt-5 sm:mt-4"
@@ -20,6 +22,7 @@ const Banner = ({ parentStyles, childStyles, name, subtitle, buttonLink }) => {
           router.push(`${buttonLink}`);
         }}
       />
+      )}
     </div>
   );
 };

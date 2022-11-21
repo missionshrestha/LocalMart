@@ -33,6 +33,7 @@ const Cart = ({ childrenStyles }) => {
       cartItems.forEach((item) => {
         setFirstImage([...firstImage, item.image_url[0].url.startsWith('https://') || item.image_url[0].url.startsWith('http://') ? item.image_url[0].url : `https://${item.image_url[0].url}`]);
       });
+      console.log(cartItems);
     }
   }, []);
 

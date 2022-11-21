@@ -7,6 +7,8 @@ import Button from '../../components/Button';
 import images from '../../assets';
 import { calculateDiscount } from '../../utils/calculateDiscount';
 import { useShopContext } from '../../hooks/useShopContext';
+import { useAuthContext } from '../../hooks/useAuthContext';
+import { Modal } from '../../components';
 
 const headers = {
   withCredentials: true,
@@ -17,6 +19,7 @@ const headers = {
 const baseURL = process.env.NEXT_PUBLIC_BACKEND_API;
 
 const ProductDetail = () => {
+  const { user } = useAuthContext();
   const [product, setProduct] = useState(null);
   const [creator, setCreator] = useState(null);
   const { qty, setQty, increaseQty, decreaseQty, onAdd } = useShopContext();
@@ -27,6 +30,7 @@ const ProductDetail = () => {
   const { theme } = useTheme();
   const [selected, setSelected] = useState(0);
   const router = useRouter();
+  const [updateModal, setUpdateModal] = useState(false);
 
   useEffect(() => {
     if (!router.isReady) return;
@@ -121,18 +125,51 @@ const ProductDetail = () => {
                 <span className="mx-2">{qty}</span>
                 <Image onClick={() => qty < product.stock && increaseQty()} src={images.rightArrow} width={42} objectFit="contain" alt="left-arrow" className={`cursor-pointer hover:scale-105 ${theme === 'dark' ? 'filter invert' : ''}`} />
               </div>
-              <Button
-                btnName="Add to cart"
-                classStyles="text-xl rounded-xl py-3"
-                handleClick={() => {
-                  onAdd(product, qty, calculateDiscount(product.price, product.discount_percentage));
-                  setQty(1);
-                // router.push(`${buttonLink}`);
-                }}
-              />
+              {user.id === product.created_by
+                ? (
+                  <Button
+                    btnName="Update Product"
+                    classStyles="text-xl rounded-xl py-3"
+                    handleClick={() => {
+                      setUpdateModal(true);
+                    }}
+                  />
+                )
+                : (
+                  <Button
+                    btnName="Add to cart"
+                    classStyles="text-xl rounded-xl py-3"
+                    handleClick={() => {
+                      onAdd(product, qty, calculateDiscount(product.price, product.discount_percentage));
+                      setQty(1);
+                      // router.push(`${buttonLink}`);
+                    }}
+                  />
+                )}
             </div>
           </div>
         </div>
+        {updateModal && (
+        <Modal
+          header="Update"
+          body={<div>Update body here</div>}
+          footer={(
+            <div className="flex flex-row sm:flex-col ">
+              <Button
+                btnName="Save"
+                classStyles="mr-5 sm:mr-0 rounded-xl"
+                handleClick={() => {}}
+              />
+              <Button
+                btnName="Cancel"
+                classStyles="rounded-xl"
+                handleClick={() => { setUpdateModal(false); }}
+              />
+            </div>
+        )}
+          handleClose={() => { setUpdateModal(false); }}
+        />
+        )}
       </div>
 
       <div className="hidden mt-6 w-full md:flex flex-col gap-10">
@@ -184,18 +221,52 @@ const ProductDetail = () => {
                 <span className="mx-2">{qty}</span>
                 <Image onClick={() => qty < product.stock && increaseQty()} src={images.rightArrow} width={42} objectFit="contain" alt="left-arrow" className={`cursor-pointer hover:scale-105 ${theme === 'dark' ? 'filter invert' : ''}`} />
               </div>
-              <Button
-                btnName="Add to cart"
-                classStyles="text-xl rounded-xl py-3"
-                handleClick={() => {
-                  onAdd(product, qty, calculateDiscount(product.price, product.discount_percentage));
-                  setQty(1);
-                  // router.push(`${buttonLink}`);
-                }}
-              />
+              {user?.id === product.created_by
+                ? (
+                  <Button
+                    btnName="Update Product"
+                    classStyles="text-xl rounded-xl py-3"
+                    handleClick={() => {
+                      // open update model
+                      setUpdateModal(true);
+                    }}
+                  />
+                )
+                : (
+                  <Button
+                    btnName="Add to cart"
+                    classStyles="text-xl rounded-xl py-3"
+                    handleClick={() => {
+                      onAdd(product, qty, calculateDiscount(product.price, product.discount_percentage));
+                      setQty(1);
+                      // router.push(`${buttonLink}`);
+                    }}
+                  />
+                )}
             </div>
           </div>
         </div>
+        {updateModal && (
+        <Modal
+          header="Update"
+          body={<div>Update body here</div>}
+          footer={(
+            <div className="flex flex-row sm:flex-col ">
+              <Button
+                btnName="Save"
+                classStyles="mr-5 sm:mr-0 rounded-xl"
+                handleClick={() => {}}
+              />
+              <Button
+                btnName="Cancel"
+                classStyles="rounded-xl"
+                handleClick={() => { setUpdateModal(false); }}
+              />
+            </div>
+        )}
+          handleClose={() => { setUpdateModal(false); }}
+        />
+        )}
       </div>
       <div className="mt-16 p-8 flex sm:flex-col justify-around">
         <div>
