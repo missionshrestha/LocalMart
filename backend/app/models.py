@@ -15,7 +15,7 @@ class Product(Base):
     created_by = Column(
         Integer, ForeignKey("user.id", ondelete="CASCADE"), nullable=False
     )
-    tags = Column(VARCHAR(50), ForeignKey("tag.tag_name", ondelete="CASCADE"))
+    tag = Column(VARCHAR(50), ForeignKey("tag.tag_name", ondelete="CASCADE"))
     slug = Column(Text, nullable=False)
     discount_percentage = Column(Integer, default=0)
     stock = Column(Integer, default=1)

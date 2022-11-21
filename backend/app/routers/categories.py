@@ -21,7 +21,7 @@ def get_products(db: Session = Depends(get_db)):
 
 @router.get("/{tag}", response_model=Page[schemas.ProductGet])
 def search_products(tag: str | None = None, db: Session = Depends(get_db)):
-    prod = db.query(models.Product).filter((models.Product.tags == tag)).all()
+    prod = db.query(models.Product).filter((models.Product.tag == tag)).all()
 
     if not prod:
         raise HTTPException(

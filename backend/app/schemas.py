@@ -17,7 +17,7 @@ class ProductGet(BaseModel):
     created_by: int
     image_url: list
     product_feature: list[ProductFeature]
-    tags: str
+    tag: str
     slug: str
     discount_percentage: int
     stock: int
@@ -33,22 +33,22 @@ class ProductPost(BaseModel):
     price: float
     image_url: list
     product_feature: list[ProductFeature]
-    tags: str
+    tag: str
     discount_percentage: int | None
     stock: int
     is_used: bool
 
 
-class ProductUpdate(BaseModel):
-    title: str
-    description: str
-    price: float
-    image_url: list
-    product_feature: list[ProductFeature]
-    tags: str
+class ProductUpdate(ProductPost):
+    title: str | None
+    description: str | None
+    price: float | None
+    image_url: list | None
+    product_feature: list[ProductFeature] | None
+    tag: str | None
     discount_percentage: int | None
-    stock: int
-    is_used: bool
+    stock: int | None
+    is_used: bool | None
 
 
 class UserCreate(BaseModel):
