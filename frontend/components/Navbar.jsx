@@ -19,7 +19,7 @@ const MenuItems = ({ isMobile, active, setActive }) => {
       case 1:
         return '/product';
       case 2:
-        return '/categories';
+        return '/';
       case 3:
         return '/about';
       case 4:
@@ -33,8 +33,13 @@ const MenuItems = ({ isMobile, active, setActive }) => {
     <ul className={`list-none flexCenter flex-row ${isMobile ? 'flex-col h-full gap-6' : ''}`}>
       {['Home', 'Products', 'Categories', 'About', 'Contact'].map((item, i) => (
         <li key={i} onClick={() => { setActive(item); }} className={`flex flex-row items-center font-montserrat font-normal text-2xl leading-10 dark:hover:text-white hover:text-mart-dark mx-3 ${active === item ? 'dark:text-white text-mart-dark-1' : 'dark:text-mart-gray-3 text-mart-gray-2'}`}>
-          <Link href={generateLink(i)}>{item}</Link>
+          {item === 'Categories'
+            ? (
+              <Link href={generateLink(i)}>{item}</Link>
+            )
+            : <Link href={generateLink(i)}>{item}</Link>}
         </li>
+
       ))}
     </ul>
   );
@@ -148,7 +153,7 @@ const Navbar = () => {
             {totalQuantities > 0 && <m.span animate={{ scale: 1 }} initial={{ scale: 0 }} className="absolute -top-2 -right-1 flex justify-center items-center rounded-full bg-red-500 w-4 h-4 text-sm text-white">{totalQuantities}</m.span>}
             <Image height={28} width={28} onClick={() => { setShowCart(true); }} src={images.cart} className={theme === 'dark' ? 'filter invert cursor-pointer' : 'cursor-pointer'} href="/" alt="cart" />
           </div>
-          <div className="h-8 w-8 rounded-full bg-slate-50 dark:bg-black flex justify-center cursor-pointer items-center" onMouseEnter={() => setToggle(true)} onMouseLeave={() => setTimeout(() => setToggle(false), 1000)}>
+          <div className="h-8 w-8 rounded-full bg-slate-50 dark:bg-black flex justify-center cursor-pointer items-center" onMouseEnter={() => setToggle(true)}>
             { !user ? (
               <Image
                 src={images.profile}
@@ -164,7 +169,7 @@ const Navbar = () => {
               <div className="h-8 w-8 rounded-full relative">
                 <img src={user.profile_img} className="object-cover h-full rounded-full" />
                 {toggle && (
-                <m.div animate={{ opacity: 1, left: -128 }} initial={{ opacity: 0, left: -100 }} className="absolute top-full -left-32 right-9 w-40 mt-3 z-10 dark:bg-mart-black-2 bg-white border dark:border-mart-black-2 border-mart-gray-2 py-3 px-4 rounded-md">
+                <m.div animate={{ opacity: 1, left: -128 }} initial={{ opacity: 0, left: -100 }} className="absolute top-full -left-32 right-9 w-40 mt-3 z-10 dark:bg-mart-black-2 bg-white border dark:border-mart-black-2 border-mart-gray-2 py-3 px-4 rounded-md" onMouseEnter={() => setToggle(true)} onMouseLeave={() => setTimeout(() => setToggle(false), 500)}>
                   {
                 ['My Profile', 'Logout'].map((item) => (<p className="font-montserrat p-1 px-2 rounded-lg dark:text-white text-mart-black-1 font-semibold text-sm my-3 cursor-pointer hover:bg-logo-green" onClick={() => handleClick(item)} key={item}>{item}</p>))
                   }
@@ -187,7 +192,7 @@ const Navbar = () => {
               {totalQuantities > 0 && <m.span animate={{ scale: 1 }} initial={{ scale: 0 }} className="absolute -top-2 -right-1 flex justify-center items-center rounded-full bg-red-500 w-4 h-4 text-sm text-white">{totalQuantities}</m.span>}
               <Image height={28} width={28} onClick={() => { setShowCart(true); }} src={images.cart} className={theme === 'dark' ? 'filter invert cursor-pointer' : 'cursor-pointer'} href="/" alt="cart" />
             </div>
-            <div onMouseEnter={() => setToggle(true)} onMouseLeave={() => setTimeout(() => setToggle(false), 1000)}>
+            <div onMouseEnter={() => setToggle(true)}>
               {/* <Image src={images.profile} className={theme === 'dark' ? 'filter invert' : ''} href="/" alt="profile" /> */}
               { !user ? (
                 <Image
@@ -204,7 +209,7 @@ const Navbar = () => {
                 <div className="h-8 w-8 rounded-full relative">
                   <img src={user.profile_img} className="object-cover h-full rounded-full" />
                   {toggle && (
-                  <m.div animate={{ opacity: 1, left: -128 }} initial={{ opacity: 0, left: -100 }} className="absolute top-full -left-32 right-9 w-40 mt-3 z-10 dark:bg-mart-black-2 bg-white border dark:border-mart-black-2 border-mart-gray-2 py-3 px-4 rounded-md">
+                  <m.div animate={{ opacity: 1, left: -128 }} initial={{ opacity: 0, left: -100 }} className="absolute top-full -left-32 right-9 w-40 mt-3 z-10 dark:bg-mart-black-2 bg-white border dark:border-mart-black-2 border-mart-gray-2 py-3 px-4 rounded-md" onMouseEnter={() => setToggle(true)} onMouseLeave={() => setTimeout(() => setToggle(false), 500)}>
                     {
                 ['My Profile', 'Logout'].map((item) => (<p className="font-montserrat p-1 px-2 rounded-lg dark:text-white text-mart-black-1 font-semibold text-sm my-3 cursor-pointer hover:bg-logo-green" onClick={() => handleClick(item)} key={item}>{item}</p>))
                   }
