@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Input = ({ inputType, title, placeholder, handleClick, hidePassword, value }) => (
+const Input = ({ inputType, title, placeholder, handleClick, hidePassword, value, defaultValue }) => (
   <div className="mt-10 w-full">
     <p className="font-montserrat dark:text-white text-mart-black-1 font-semibold text-xl">
       {title}
@@ -8,6 +8,7 @@ const Input = ({ inputType, title, placeholder, handleClick, hidePassword, value
     {inputType === 'number' ? (
       <div className="dark:bg-mart-black-1 bg-white border dark:border-mart-black-1 border-mart-gray-2 rounded-lg w-full outline-none font-poppins dark:text-white text-mart-gray-2 text-base mt-4 px-4 py-3 flexBetween flex-row">
         <input
+          defaultValue={defaultValue}
           value={value}
           type="number"
           className="flex w-full dark:bg-mart-black-1 bg-white outline-none"
@@ -17,6 +18,7 @@ const Input = ({ inputType, title, placeholder, handleClick, hidePassword, value
       </div>
     ) : inputType === 'textarea' ? (
       <textarea
+        defaultValue={defaultValue}
         rows={10}
         className="dark:bg-mart-black-1 bg-white border dark:border-mart-black-1 border-mart-gray-2 rounded-lg w-full outline-none font-poppins dark:text-white text-mart-gray-2 text-base mt-4 px-4 py-3"
         placeholder={placeholder}
@@ -24,6 +26,7 @@ const Input = ({ inputType, title, placeholder, handleClick, hidePassword, value
       />
     ) : inputType === 'password' ? (
       <input
+        defaultValue={defaultValue}
         value={value}
         type={hidePassword ? 'password' : 'text'}
         className="dark:bg-mart-black-1 bg-white border dark:border-mart-black-1 border-mart-gray-2 rounded-lg w-full outline-none font-poppins dark:text-white text-mart-gray-2 text-base mt-4 px-4 py-3"
@@ -32,6 +35,7 @@ const Input = ({ inputType, title, placeholder, handleClick, hidePassword, value
       />
     ) : (
       <input
+        defaultValue={defaultValue}
         value={value}
         className="dark:bg-mart-black-1 bg-white border dark:border-mart-black-1 border-mart-gray-2 rounded-lg w-full outline-none font-poppins dark:text-white text-mart-gray-2 text-base mt-4 px-4 py-3"
         placeholder={placeholder}

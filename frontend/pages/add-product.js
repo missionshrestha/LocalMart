@@ -132,7 +132,7 @@ const AddProduct = () => {
   const handleSubmit = () => {
     setError(null);
     if (inputDetail.title !== '' && inputDetail.description !== '' && inputDetail.discount_percentage !== '' && inputDetail.stock !== '' && inputDetail.price !== '' && validationMessage.title === '' && validationMessage.description === '' && validationMessage.stock === '' && validationMessage.price === '' && validationMessage.discount_percentage === '') {
-      const data = { ...inputDetail, product_feature: feature, image_url: fileUrl, tags: activeSelect, is_used: false };
+      const data = { ...inputDetail, product_feature: feature, image_url: fileUrl, tag: activeSelect, is_used: false };
       axios({
         method: 'POST',
         url: `${process.env.NEXT_PUBLIC_BACKEND_API}/product/`,

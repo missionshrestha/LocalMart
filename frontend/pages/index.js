@@ -149,7 +149,7 @@ const Home = () => {
                   discount: item.discount_percentage,
                   discountedPrice: calculateDiscount(item.price, item.discount_percentage),
                   slug: item.slug,
-                  category: item.tags,
+                  category: item.tag,
                 }}
               />
             )) : errorMessage != null ? errorMessage : 'No Products Available'}
