@@ -77,10 +77,10 @@ def update_product(
     current_user=Depends(oauth2.get_current_user),
 ):
     # could not modify new_product;
-    with_current_user = updated_product.dict().copy()
-    with_current_user.update(
-        {"created_by": current_user.id, "slug": slugify(updated_product.title)}  # type: ignore
-    )
+    # with_current_user = updated_product.dict().copy()
+    # with_current_user.update(
+    #     {"created_by": current_user.id, "slug": slugify(updated_product.title)}  # type: ignore
+    # )
     # image_url: list = with_current_user["image_url"]
     # product_feature: list = with_current_user["product_feature"]
     # with_current_user.pop("image_url")
@@ -100,9 +100,9 @@ def update_product(
             detail="Not Authorized to perform requested action",
         )
 
-    # print(type(with_current_user))
+    print(updated_product.dict())
     db.query(models.Product).filter(models.Product.id == id).update(
-        {"title": "updated temp"},
+        updated_product.dict(),
         synchronize_session=False,
     )
     db.commit()
