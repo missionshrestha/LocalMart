@@ -169,6 +169,34 @@ def get_product_slug(slug: str, db: Session = Depends(get_db)):
     return product
 
 
+@router.get("/{id}/order")
+def get_consumers(
+    id: int,
+    db: Session = Depends(get_db),
+    current_user=Depends(oauth2.get_current_user),
+):
+
+    consumers_id = (
+        db.query(models.Order.user_id).filter(models.Order.product_id == id).all()
+    )
+
+    consumers_id = [x[0] for x in consumers_id]
+    consumers = []
+    for i in consumers_id:
+        consumers.append(
+            db.query(
+                models.User.id,
+                models.User.name,
+                models.User.phone_number,
+                models.User.profile_img,
+            )
+            .filter(models.User.id == i)
+            .all()
+        )
+
+    return consumers
+
+
 @router.get("/search/", response_model=Page[schemas.ProductGet])
 def search_products(q: str | None = None, db: Session = Depends(get_db)):
     q = "%{}%".format(q)
