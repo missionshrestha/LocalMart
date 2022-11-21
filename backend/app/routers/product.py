@@ -77,14 +77,9 @@ def update_product(
     current_user=Depends(oauth2.get_current_user),
 ):
     # can not modify updated_product
-    up_copy = updated_product.dict().copy()
-
-    # Some formatting stuff
-    image_url_list = up_copy.pop("image_url")
-    appended_image_url_list = {}
-    product_feature = up_copy.pop("product_feature")
-    for url in image_url_list:
-        appended_image_url_list["url"] = url
+    up_copy = updated_product.dict(exclude_none=True).copy()
+    if up_copy["title"] != None:
+        up_copy["slug"] = slugify(up_copy["title"])
 
     # Query for exception
     get_product = db.query(models.Product).filter(models.Product.id == id).first()
@@ -101,19 +96,29 @@ def update_product(
             detail="Not Authorized to perform requested action",
         )
 
-    # Into the database
+    # Some formatting stuff
+    if "image_url" in up_copy:
+        image_url_list = up_copy.pop("image_url")
+        appended_image_url_list = {}
+        for url in image_url_list:
+            appended_image_url_list["url"] = url
+
+        db.query(models.ImageURL).filter(models.ImageURL.id == id).update(
+            appended_image_url_list,
+            synchronize_session=False,
+        )
+    if "product_feature" in up_copy:
+        product_feature = up_copy.pop("product_feature")
+        db.query(models.ProductFeature).filter(models.ProductFeature.id == id).update(
+            *product_feature,
+            synchronize_session=False,
+        )
+
     db.query(models.Product).filter(models.Product.id == id).update(
         up_copy,
         synchronize_session=False,
     )
-    db.query(models.ImageURL).filter(models.ImageURL.id == id).update(
-        appended_image_url_list,
-        synchronize_session=False,
-    )
-    db.query(models.ProductFeature).filter(models.ProductFeature.id == id).update(
-        *product_feature,
-        synchronize_session=False,
-    )
+
     db.commit()
     return "Product updated!"
 
@@ -172,7 +177,7 @@ def search_products(q: str | None = None, db: Session = Depends(get_db)):
         .filter(
             (models.Product.title.like(q))
             | (models.Product.description.like(q))
-            | (models.Product.tags.like(q))
+            | (models.Product.tag.like(q))
         )
         .all()
     )
