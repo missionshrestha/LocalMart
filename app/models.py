@@ -15,7 +15,7 @@ class Product(Base):
     created_by = Column(
         Integer, ForeignKey("user.id", ondelete="CASCADE"), nullable=False
     )
-    tags = Column(VARCHAR(50), ForeignKey("tag.tag_name", ondelete="CASCADE"))
+    tag = Column(VARCHAR(50), ForeignKey("tag.tag_name", ondelete="CASCADE"))
     slug = Column(Text, nullable=False)
     discount_percentage = Column(Integer, default=0)
     stock = Column(Integer, default=1)
@@ -53,3 +53,11 @@ class ProductFeature(Base):
     id = Column(Integer, ForeignKey("product.id", ondelete="CASCADE"))
     title = Column(Text, nullable=False)
     description = Column(Text, nullable=False)
+
+
+class Order(Base):
+    __tablename__ = "order"
+    # Just in case PK
+    pk = Column(Integer, primary_key=True)
+    product_id = Column(Integer, ForeignKey("product.id", ondelete="CASCADE"))
+    user_id = Column(Integer, ForeignKey("user.id", ondelete="CASCADE"))

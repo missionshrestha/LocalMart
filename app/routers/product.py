@@ -35,17 +35,17 @@ def add_product(
     db: Session = Depends(get_db),
     current_user=Depends(oauth2.get_current_user),
 ):
-    # could not modify new_product;
-    add_current_user = new_product.dict().copy()
-    add_current_user.update(
+    # can not modify new_product
+    with_current_user = new_product.dict().copy()
+    with_current_user.update(
         {"created_by": current_user.id, "slug": slugify(new_product.title)}
     )
-    image_url: list = add_current_user["image_url"]
-    product_feature: list = add_current_user["product_feature"]
-    add_current_user.pop("image_url")
-    add_current_user.pop("product_feature")
+    image_url: list = with_current_user["image_url"]
+    product_feature: list = with_current_user["product_feature"]
+    with_current_user.pop("image_url")
+    with_current_user.pop("product_feature")
 
-    new_product = models.Product(**add_current_user)
+    new_product = models.Product(**with_current_user)
     db.add(new_product)
     db.commit()
     db.refresh(new_product)
@@ -69,6 +69,86 @@ def add_product(
     return "Product added!"
 
 
+@router.put("/{id}")
+def update_product(
+    id: int,
+    updated_product: schemas.ProductUpdate,
+    db: Session = Depends(get_db),
+    current_user=Depends(oauth2.get_current_user),
+):
+    # can not modify updated_product
+    up_copy = updated_product.dict(exclude_none=True).copy()
+    if up_copy["title"] != None:
+        up_copy["slug"] = slugify(up_copy["title"])
+
+    # Query for exception
+    get_product = db.query(models.Product).filter(models.Product.id == id).first()
+
+    if get_product == None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Product with id {id} does not exist",
+        )
+
+    if get_product.created_by != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not Authorized to perform requested action",
+        )
+
+    # Some formatting stuff
+    if "image_url" in up_copy:
+        image_url_list = up_copy.pop("image_url")
+        appended_image_url_list = {}
+        for url in image_url_list:
+            appended_image_url_list["url"] = url
+
+        db.query(models.ImageURL).filter(models.ImageURL.id == id).update(
+            appended_image_url_list,
+            synchronize_session=False,
+        )
+    if "product_feature" in up_copy:
+        product_feature = up_copy.pop("product_feature")
+        db.query(models.ProductFeature).filter(models.ProductFeature.id == id).update(
+            *product_feature,
+            synchronize_session=False,
+        )
+
+    db.query(models.Product).filter(models.Product.id == id).update(
+        up_copy,
+        synchronize_session=False,
+    )
+
+    db.commit()
+    return "Product updated!"
+
+
+@router.delete("/{id}")
+def delete_product(
+    id: int,
+    db: Session = Depends(get_db),
+    current_user=Depends(oauth2.get_current_user),
+):
+    get_product = db.query(models.Product).filter(models.Product.id == id).first()
+
+    if get_product == None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Product with id {id} does not exist",
+        )
+
+    if get_product.created_by != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not Authorized to perform requested action",
+        )
+    db.query(models.Product).filter(models.Product.id == id).delete(
+        synchronize_session=False
+    )
+    db.commit()
+    return "Product deleted!"
+
+
 @router.get("/{slug}", response_model=schemas.ProductGet)
 def get_product_slug(slug: str, db: Session = Depends(get_db)):
 
@@ -89,6 +169,34 @@ def get_product_slug(slug: str, db: Session = Depends(get_db)):
     return product
 
 
+@router.get("/{id}/order")
+def get_consumers(
+    id: int,
+    db: Session = Depends(get_db),
+    current_user=Depends(oauth2.get_current_user),
+):
+
+    consumers_id = (
+        db.query(models.Order.user_id).filter(models.Order.product_id == id).all()
+    )
+
+    consumers_id = [x[0] for x in consumers_id]
+    consumers = []
+    for i in consumers_id:
+        consumers.append(
+            db.query(
+                models.User.id,
+                models.User.name,
+                models.User.phone_number,
+                models.User.profile_img,
+            )
+            .filter(models.User.id == i)
+            .all()
+        )
+
+    return consumers
+
+
 @router.get("/search/", response_model=Page[schemas.ProductGet])
 def search_products(q: str | None = None, db: Session = Depends(get_db)):
     q = "%{}%".format(q)
@@ -97,7 +205,7 @@ def search_products(q: str | None = None, db: Session = Depends(get_db)):
         .filter(
             (models.Product.title.like(q))
             | (models.Product.description.like(q))
-            | (models.Product.tags.like(q))
+            | (models.Product.tag.like(q))
         )
         .all()
     )

@@ -8,7 +8,7 @@ load_dotenv()
 
 SQLALCHEMY_DATABASE_URL = f"mysql+pymysql://{os.environ['DB_USER']}:{os.environ['DB_PASSWORD']}@{os.environ['DB_HOST']}/{os.environ['DB_NAME']}"
 
-engine = create_engine(SQLALCHEMY_DATABASE_URL, echo=True)
+engine = create_engine(SQLALCHEMY_DATABASE_URL, echo=False)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
