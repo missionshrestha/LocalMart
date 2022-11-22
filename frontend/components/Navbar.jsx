@@ -61,6 +61,7 @@ const Navbar = () => {
   const handleClick = (item) => {
     switch (item) {
       case 'My Profile':
+        router.push('/profile', undefined, { shallow: true });
         break;
       case 'Logout':
         logout();
@@ -85,14 +86,27 @@ const Navbar = () => {
               <MenuItems active={active} setActive={setActive} isMobile />
             </div>
             <div className="p-4 border-t dark:border-mart-black-1 border-mart-gray-1">
-              <Button
-                btnName="Login"
-                classStyles="mx-2 rounded-xl sm:w-full"
-                handleClick={() => {
-                  setActive('');
-                  router.push('/login');
-                }}
-              />
+              {user !== null
+                ? (
+                  <Button
+                    btnName="Add Product"
+                    classStyles="mx-2 rounded-xl sm:w-full"
+                    handleClick={() => {
+                      setActive('');
+                      router.push('/add-product');
+                    }}
+                  />
+                )
+                : (
+                  <Button
+                    btnName="Login"
+                    classStyles="mx-2 rounded-xl sm:w-full"
+                    handleClick={() => {
+                      setActive('');
+                      router.push('/login');
+                    }}
+                  />
+                )}
             </div>
           </m.div>
           )}
@@ -124,15 +138,28 @@ const Navbar = () => {
             <div className="flex-1 p-4">
               <MenuItems active={active} setActive={setActive} isMobile />
             </div>
-            <div className="p-4 border-t dark:border-mart-black-1 border-mart-gray-1">
-              <Button
-                btnName="Login"
-                classStyles="mx-2 rounded-xl"
-                handleClick={() => {
-                  setActive('');
-                  router.push('/login');
-                }}
-              />
+            <div className="p-4 flex justify-center border-t dark:border-mart-black-1 border-mart-gray-1">
+              {user !== null
+                ? (
+                  <Button
+                    btnName="Add Product"
+                    classStyles="mx-2 rounded-xl"
+                    handleClick={() => {
+                      setActive('');
+                      router.push('/add-product');
+                    }}
+                  />
+                )
+                : (
+                  <Button
+                    btnName="Login"
+                    classStyles="mx-2 rounded-xl"
+                    handleClick={() => {
+                      setActive('');
+                      router.push('/login');
+                    }}
+                  />
+                )}
             </div>
           </m.div>
           )}

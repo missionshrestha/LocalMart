@@ -191,7 +191,7 @@ const SignUp = () => {
                 <div className="mt-12 w-full flex justify-between">
                   <Button handleClick={handleSignUp} btnName="Create account" classStyles="rounded-md w-2/5 py-3 xs:py-2" />
 
-                  <Button btnName="Login" classStyles="rounded-md w-2/5 py-3 border text-black bg-gray-400 xs:py-2" handleClick={() => router.push('/login', undefined, { shallow: true })} />
+                  <Button btnName="Login" classStyles="rounded-md w-2/5 py-3 border text-black bg-gray-500 xs:py-2" handleClick={() => router.push('/login', undefined, { shallow: true })} />
                 </div>
                 <div className="flex justify-center items-center mt-8">
 

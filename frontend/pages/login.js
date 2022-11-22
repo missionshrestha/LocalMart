@@ -91,7 +91,7 @@ const Login = () => {
               <div className="mt-12 w-full flex justify-between">
                 <Button btnName="Login" handleClick={handleLogin} classStyles="rounded-md w-2/5 py-3 xs:py-2" />
 
-                <Button btnName="Create account" classStyles="rounded-md w-2/5 py-3 border bg-gray-400 xs:py-2" handleClick={() => router.push('/signup', undefined, { shallow: true })} />
+                <Button btnName="Create account" classStyles="rounded-md w-2/5 py-3 border bg-gray-500 xs:py-2" handleClick={() => router.push('/signup', undefined, { shallow: true })} />
               </div>
               <div className="flex justify-center items-center mt-8">
                 { error !== null && <p className="absolute text-red-500">{error}</p>}
