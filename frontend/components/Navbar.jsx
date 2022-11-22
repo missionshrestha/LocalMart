@@ -19,7 +19,7 @@ const MenuItems = ({ isMobile, active, setActive }) => {
       case 1:
         return '/product';
       case 2:
-        return '/';
+        return '/category';
       case 3:
         return '/about';
       case 4:
