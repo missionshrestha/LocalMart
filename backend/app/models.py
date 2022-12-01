@@ -62,3 +62,4 @@ class Order(Base):
     product_id = Column(Integer, ForeignKey("product.id", ondelete="CASCADE"))
     user_id = Column(Integer, ForeignKey("user.id", ondelete="CASCADE"))
     quantity = Column(Integer, nullable=False)
+    created_at = Column(DateTime, server_default=func.now())
