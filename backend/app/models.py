@@ -61,3 +61,4 @@ class Order(Base):
     pk = Column(Integer, primary_key=True)
     product_id = Column(Integer, ForeignKey("product.id", ondelete="CASCADE"))
     user_id = Column(Integer, ForeignKey("user.id", ondelete="CASCADE"))
+    quantity = Column(Integer, nullable=False)

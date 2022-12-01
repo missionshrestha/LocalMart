@@ -90,3 +90,4 @@ class TokenData(BaseModel):
 
 class OrderPost(BaseModel):
     product_id: int
+    quantity: int

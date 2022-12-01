@@ -38,6 +38,11 @@ def add_order(
     db: Session = Depends(get_db),
     current_user=Depends(oauth2.get_current_user),
 ):
+    if models.Product.stock < new_order.quantity:
+        raise HTTPException(
+            status_code=status.HTTP_406_NOT_ACCEPTABLE,
+            detail="Not sufficent stock",
+        )
     new_order_copy = new_order.dict().copy()
     new_order_copy["user_id"] = current_user.id
     order = models.Order(**new_order_copy)
@@ -45,7 +50,7 @@ def add_order(
     db.commit()
 
     db.query(models.Product).filter(models.Product.id == new_order.product_id).update(
-        {"stock": models.Product.stock - 1},
+        {"stock": models.Product.stock - new_order.quantity},
         synchronize_session=False,
     )
     db.commit()
