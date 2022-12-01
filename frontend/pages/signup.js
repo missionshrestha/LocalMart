@@ -33,8 +33,8 @@ const SignUp = () => {
   const router = useRouter();
   const { theme } = useTheme();
   const [fileUrl, setFileUrl] = useState(null);
-  const [inputDetail, setInputDetail] = useState({ name: '', email: '', password: '' });
-  const [validationMessage, setValidationMessage] = useState({ name: '', email: '', password: '' });
+  const [inputDetail, setInputDetail] = useState({ name: '', email: '', password: '', phone_number: '' });
+  const [validationMessage, setValidationMessage] = useState({ name: '', email: '', password: '', phone_number: '' });
   const [error, setError] = useState(null);
   // const { dispatch } = useAuthContext();
 
@@ -73,6 +73,14 @@ const SignUp = () => {
         setValidationMessage({ ...validationMessage, password: 'Password should have at least 8 characters.' });
       }
     }
+
+    if (attribute === 'phone_number') {
+      if (value.length < 10 || value.length > 10) {
+        setValidationMessage({ ...validationMessage, phone_number: 'Should be 10 Number long.' });
+      } else {
+        setValidationMessage({ ...validationMessage, phone_number: '' });
+      }
+    }
   };
 
   const onDrop = useCallback(async (acceptedFile) => {
@@ -95,8 +103,8 @@ const SignUp = () => {
 
   const handleSignUp = () => {
     setError(null);
-    if (inputDetail.name !== '' && inputDetail.email !== '' && inputDetail.password !== '' && validationMessage.name === '' && validationMessage.email === '' && validationMessage.password === '') {
-      const data = { ...inputDetail, phone_number: '', profile_img: fileUrl === null ? 'string' : fileUrl };
+    if (inputDetail.name !== '' && inputDetail.email !== '' && inputDetail.password && inputDetail.phone_number !== '' && validationMessage.name === '' && validationMessage.email === '' && validationMessage.password === '' && validationMessage.phone_number === '') {
+      const data = { ...inputDetail, profile_img: fileUrl === null ? 'string' : fileUrl };
       axios({
         method: 'POST',
         url: `${process.env.NEXT_PUBLIC_BACKEND_API}/user/`,
@@ -117,7 +125,7 @@ const SignUp = () => {
             const notify = () => toast('Account created successfully. You can login now');
             notify();
             setTimeout(() => {
-              router.push('/signup', undefined, { shallow: true });
+              router.push('/login', undefined, { shallow: true });
             }, 2000);
           }
         })
@@ -126,9 +134,9 @@ const SignUp = () => {
         });
 
       // console.log({ ...inputDetail, profile_img: fileUrl === null ? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3y9BKnIJ5AuNPL5RgemA_U_4s5IEzB_cFzQ&usqp=CAU' : fileUrl, phone_number: '' });
-    } else if (inputDetail.name === '' && inputDetail.email === '' && inputDetail.password === '') {
+    } else if (inputDetail.name === '' && inputDetail.email === '' && inputDetail.password === '' && inputDetail.phone_number === '') {
       setError('Plese fill all the required fields.');
-    } else if (validationMessage.name !== '' || validationMessage.email !== '' || validationMessage.password !== '') {
+    } else if (validationMessage.name !== '' || validationMessage.email !== '' || validationMessage.password !== '' || validationMessage.phone_number !== '') {
       setError('Resolve all validation error first.');
     } else {
       setError('Last One');
@@ -163,6 +171,8 @@ const SignUp = () => {
                 {validationMessage.email !== '' && <p className="absolute text-red-500">{validationMessage.email}</p>}
                 <Input inputType="password" hidePassword title="Password" placeholder="Enter your password" handleClick={(e) => { setInputDetail({ ...inputDetail, password: e.target.value }); handleValidation('password', e.target.value); }} />
                 {validationMessage.password !== '' && <p className="absolute text-red-500">{validationMessage.password}</p>}
+                <Input inputType="number" title="Phone Number" placeholder="Enter your phone number" handleClick={(e) => { setInputDetail({ ...inputDetail, phone_number: e.target.value }); handleValidation('phone_number', e.target.value); }} />
+                {validationMessage.phone_number !== '' && <p className="absolute text-red-500">{validationMessage.phone_number}</p>}
                 <div className="mt-16">
                   <p className="font-poppins dark:text-white text-book-black-1 font-semibold text-xl">Profile Picture</p>
                   <div className="mt-4 w-full flex justify-center">

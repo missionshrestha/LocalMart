@@ -23,6 +23,10 @@ const cards = {
   },
 };
 
+const submitOrder = (cartItems) => {
+  console.log(cartItems);
+};
+
 const Cart = ({ childrenStyles }) => {
   const { cartItems, setShowCart, onAdd, onRemove, totalPrice } = useShopContext();
   const [firstImage, setFirstImage] = useState([]);
@@ -65,7 +69,8 @@ const Cart = ({ childrenStyles }) => {
                   && (
                   <Image
                     key={item.id}
-                    src={firstImage[idx]}
+                    // src={firstImage[idx]}
+                    src={item.image_url[0].url.startsWith('https://') || item.image_url[0].url.startsWith('http://') ? item.image_url[0].url : images.defaultProduct}
                     onError={() => {
                       const arr = [...firstImage];
                       arr[idx] = images.defaultProduct;
@@ -103,7 +108,7 @@ const Cart = ({ childrenStyles }) => {
         {cartItems.length >= 1 && (
           <m.div layout>
             <h3 className="mt-8 font-bold text-mart-black-1 dark:text-white">Sutotal: ${totalPrice}</h3>
-            <Button btnName="Purchase" classStyles="rounded-md mt-5 w-full py-3 border text-black bg-logo-green xs:py-2" />
+            <Button btnName="Purchase" handleClick={() => submitOrder(cartItems)} classStyles="rounded-md mt-5 w-full py-3 border text-black bg-logo-green xs:py-2" />
           </m.div>
         )}
       </m.div>
