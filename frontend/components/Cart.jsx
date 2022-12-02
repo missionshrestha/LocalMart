@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useTheme } from 'next-themes';
 import { motion as m } from 'framer-motion';
+import { useRouter } from 'next/router';
 import { useShopContext } from '../hooks/useShopContext';
 import images from '../assets';
 import Button from './Button';
-
+import Modal from './Modal';
+import { useAuthContext } from '../hooks/useAuthContext';
 // Animation Variants
 const card = {
   hidden: { opacity: 0, scale: 0.8 },
@@ -23,15 +25,13 @@ const cards = {
   },
 };
 
-const submitOrder = (cartItems) => {
-  console.log(cartItems);
-};
-
 const Cart = ({ childrenStyles }) => {
   const { cartItems, setShowCart, onAdd, onRemove, totalPrice } = useShopContext();
   const [firstImage, setFirstImage] = useState([]);
   const { theme } = useTheme();
-
+  const [paymentModal, setPaymentModal] = useState(false);
+  const { user } = useAuthContext();
+  const router = useRouter();
   useEffect(() => {
     if (cartItems.length > 0) {
       cartItems.forEach((item) => {
@@ -108,10 +108,39 @@ const Cart = ({ childrenStyles }) => {
         {cartItems.length >= 1 && (
           <m.div layout>
             <h3 className="mt-8 font-bold text-mart-black-1 dark:text-white">Sutotal: ${totalPrice}</h3>
-            <Button btnName="Purchase" handleClick={() => submitOrder(cartItems)} classStyles="rounded-md mt-5 w-full py-3 border text-black bg-logo-green xs:py-2" />
+            {user !== null
+              ? <Button btnName="Purchase" handleClick={() => setPaymentModal(true)} classStyles="rounded-md mt-5 w-full py-3 border text-black bg-logo-green xs:py-2" />
+              : (
+                <>
+                  <p className="font-extrabold">You need to login first inorder to make purchase.</p>
+                  <Button btnName="Login" handleClick={() => { setShowCart(false); router.push('/login', undefined, { shallow: true }); }} classStyles="rounded-md mt-5 w-full py-3 border text-black bg-logo-green xs:py-2" />
+                </>
+              )}
           </m.div>
         )}
       </m.div>
+
+      {paymentModal && (
+        <Modal
+          header="Oops!"
+          body={(
+            <div className="flex justify-center items-center h-[100px]">
+              <h1 className="font-montserrat text-2xl">No Payment Gateway Integrated</h1>
+            </div>
+          )}
+          footer={(
+            <div>
+              <Button
+                btnName="Cancel"
+                classStyles="rounded-xl"
+                handleClick={() => { setPaymentModal(false); }}
+              />
+            </div>
+        )}
+          handleClose={() => setPaymentModal(false)}
+        />
+      )}
+
     </m.div>
   );
 };

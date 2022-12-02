@@ -37,6 +37,7 @@ const SignUp = () => {
   const [validationMessage, setValidationMessage] = useState({ name: '', email: '', password: '', phone_number: '' });
   const [error, setError] = useState(null);
   // const { dispatch } = useAuthContext();
+  const [loadingCircle, setLoadingCircle] = useState(false);
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'));
@@ -115,6 +116,7 @@ const SignUp = () => {
         },
       })
         .then((response) => {
+          setLoadingCircle(true);
           if (response.status === 201) {
             // setData(response.data);
             // console.log(response.data);
@@ -124,6 +126,7 @@ const SignUp = () => {
             setFileUrl(null);
             const notify = () => toast('Account created successfully. You can login now');
             notify();
+            setLoadingCircle(false);
             setTimeout(() => {
               router.push('/login', undefined, { shallow: true });
             }, 2000);
@@ -199,9 +202,11 @@ const SignUp = () => {
                   </div>
                 </div>
                 <div className="mt-12 w-full flex justify-between">
-                  <Button handleClick={handleSignUp} btnName="Create account" classStyles="rounded-md w-2/5 py-3 xs:py-2" />
+                  {loadingCircle
+                    ? <Button btnName="Processing" classStyles="rounded-md w-2/5 py-3 xs:py-2" />
+                    : <Button handleClick={handleSignUp} btnName="Create account" classStyles="rounded-md w-2/5 py-3 xs:py-2" />}
 
-                  <Button btnName="Login" classStyles="rounded-md w-2/5 py-3 border text-black bg-gray-500 xs:py-2" handleClick={() => router.push('/login', undefined, { shallow: true })} />
+                  <Button btnName="Login" classStyles="rounded-md w-2/5 py-3 border text-black opacity-40 hover:opacity-100 xs:py-2" handleClick={() => router.push('/login', undefined, { shallow: true })} />
                 </div>
                 <div className="flex justify-center items-center mt-8">
 

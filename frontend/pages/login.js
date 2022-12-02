@@ -16,8 +16,10 @@ const Login = () => {
   // const [data, setData] = useState();
   const { dispatch } = useAuthContext();
   const [error, setError] = useState(null);
+  const [loadingCircle, setLoadingCircle] = useState(false);
 
   const handleLogin = () => {
+    setLoadingCircle(true);
     const formData = new FormData();
     formData.append('username', inputDetail.email);
     formData.append('password', inputDetail.password);
@@ -38,10 +40,12 @@ const Login = () => {
           localStorage.setItem('user', JSON.stringify(response.data));
           dispatch({ type: 'LOGIN', payload: response.data });
           setInputDetail({ email: '', password: '' });
+          setLoadingCircle(false);
           router.push('/', undefined, { shallow: true });
         }
       })
       .catch((err) => {
+        setLoadingCircle(false);
         if (err.response?.status === 403) {
           setError(err.response.data.detail);
         }
@@ -89,9 +93,11 @@ const Login = () => {
               <Input value={inputDetail.password} inputType="password" hidePassword title="Password" placeholder="Enter your password" handleClick={(e) => { setInputDetail({ ...inputDetail, password: e.target.value }); handleValidation('password', e.target.value); }} />
               {/* {validationMessage.password !== '' && <p className="absolute text-red-500">{validationMessage.password}</p>} */}
               <div className="mt-12 w-full flex justify-between">
-                <Button btnName="Login" handleClick={handleLogin} classStyles="rounded-md w-2/5 py-3 xs:py-2" />
+                {loadingCircle
+                  ? <Button btnName="Processing" handleClick={handleLogin} classStyles="rounded-md w-2/5 py-3 xs:py-2" />
+                  : <Button btnName="Login" handleClick={handleLogin} classStyles="rounded-md w-2/5 py-3 xs:py-2" />}
 
-                <Button btnName="Create account" classStyles="rounded-md w-2/5 py-3 border bg-gray-500 xs:py-2" handleClick={() => router.push('/signup', undefined, { shallow: true })} />
+                <Button btnName="Create account" classStyles="rounded-md w-2/5 py-3 border opacity-40 hover:opacity-100 bg-gray-400 xs:py-2" handleClick={() => router.push('/signup', undefined, { shallow: true })} />
               </div>
               <div className="flex justify-center items-center mt-8">
                 { error !== null && <p className="absolute text-red-500">{error}</p>}

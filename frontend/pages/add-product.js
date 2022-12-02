@@ -45,6 +45,7 @@ const AddProduct = () => {
   const [activeSelect, setActiveSelect] = useState('None');
   const [validationMessage, setValidationMessage] = useState({ title: '', description: '', price: '', discount_percentage: '', stock: '' });
   const [error, setError] = useState(null);
+  const [loadingCircle, setLoadingCircle] = useState(false);
   // const { dispatch } = useAuthContext();
 
   useEffect(() => {
@@ -131,6 +132,7 @@ const AddProduct = () => {
 
   const handleSubmit = () => {
     setError(null);
+    setLoadingCircle(true);
     if (inputDetail.title !== '' && inputDetail.description !== '' && inputDetail.discount_percentage !== '' && inputDetail.stock !== '' && inputDetail.price !== '' && validationMessage.title === '' && validationMessage.description === '' && validationMessage.stock === '' && validationMessage.price === '' && validationMessage.discount_percentage === '') {
       const data = { ...inputDetail, product_feature: feature, image_url: fileUrl, tag: activeSelect, is_used: false };
       axios({
@@ -154,7 +156,7 @@ const AddProduct = () => {
         .catch((err) => {
           if (err.response?.status === 401) { setError(err.response.data.detail); } else { setError(err.message); }
         });
-
+      setLoadingCircle(false);
       // console.log({ ...inputDetail, profile_img: fileUrl === null ? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3y9BKnIJ5AuNPL5RgemA_U_4s5IEzB_cFzQ&usqp=CAU' : fileUrl, phone_number: '' });
     } else if (inputDetail.title === '' || inputDetail.description === '' || inputDetail.discount_percentage === '' || inputDetail.stock === '' || inputDetail.price === '') {
       setError('Plese fill all the required fields.');
@@ -163,6 +165,7 @@ const AddProduct = () => {
     } else {
       setError('Last One');
     }
+    setLoadingCircle(false);
   };
 
   const fileStyle = useMemo(() => (
@@ -295,7 +298,9 @@ const AddProduct = () => {
                   <Button handleClick={addFields} btnName="Add more..." classStyles="mt-2 rounded-md py-3 xs:py-2" />
                 </div>
                 <div className="mt-12 w-full flex justify-between">
-                  <Button handleClick={handleSubmit} btnName="Create product" classStyles="rounded-md w-full py-3 xs:py-2" />
+                  {loadingCircle
+                    ? <Button handleClick={handleSubmit} btnName="Processing" classStyles="rounded-md w-full py-3 xs:py-2" />
+                    : <Button handleClick={handleSubmit} btnName="Create product" classStyles="rounded-md w-full py-3 xs:py-2" />}
 
                   {/* <Button btnName="Login" classStyles="rounded-md w-2/5 py-3 border text-black bg-gray-400 xs:py-2" handleClick={() => router.push('/login', undefined, { shallow: true })} /> */}
                 </div>

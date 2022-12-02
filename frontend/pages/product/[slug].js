@@ -4,6 +4,7 @@ import { useTheme } from 'next-themes';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import { useDropzone } from 'react-dropzone';
+import { toast } from 'react-toastify';
 import Button from '../../components/Button';
 import images from '../../assets';
 import { calculateDiscount } from '../../utils/calculateDiscount';
@@ -235,6 +236,26 @@ const ProductDetail = () => {
     );
   }
 
+  const deleteProduct = () => {
+    axios({
+      method: 'DELETE',
+      url: `${process.env.NEXT_PUBLIC_BACKEND_API}/product/${productCopy.id}`,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        accept: 'application/json',
+        Authorization: `Bearer ${validToken()}`,
+        'Content-Type': 'application/json',
+      },
+    }).then(() => {
+      const notify = () => toast('Product Deleted successfully.');
+      notify();
+      setTimeout(() => {
+        router.push('/', undefined, { shallow: true });
+      }, 100);
+      setFileUrl(null);
+    });
+  };
+
   return (
     <div className="flex flex-col justify-end sm:px-4 p-12 pt-16">
       <div className="mt-6 w-full md:hidden flex gap-10 h-96">
@@ -254,7 +275,7 @@ const ProductDetail = () => {
             <p className="text-subtitle-blue italic font-semibold text-base md:mb-4 sm:mb-1 xs:ml-0">- The {product.tag}</p>
             <h1 className="text-4xl font-bold">{product.title}</h1>
             <div className="mt-5 flex">
-              <span className="bg-gray-600 px-4 py-2 rounded-2xl text-white font-montserrat text-sm font-semibold">{product.tag.toUpperCase()}</span>
+              <span onClick={() => router.push(`/category/${product.tag.toLowerCase()}`, undefined, { shallow: true })} className="cursor-pointer bg-gray-600 px-4 py-2 rounded-2xl text-white font-montserrat text-sm font-semibold">{product.tag.toUpperCase()}</span>
               <div className="flex gap-3 ml-8 text-2xl">
                 {product.discount_percentage > 0 && <div className="text text-mart-gray-2 line-through">${product.price}</div>}
                 <div className="font-semibold">${calculateDiscount(product.price, product.discount_percentage)}</div>
@@ -286,13 +307,16 @@ const ProductDetail = () => {
               </div>
               {user?.id === product.created_by
                 ? (
-                  <Button
-                    btnName="Update Product"
-                    classStyles="text-xl rounded-xl py-3"
-                    handleClick={() => {
-                      setUpdateModal(true);
-                    }}
-                  />
+                  <div className="flex gap-3 justify-center items-center">
+                    <Button
+                      btnName="Update Product"
+                      classStyles="text-xl rounded-xl py-3"
+                      handleClick={() => {
+                        setUpdateModal(true);
+                      }}
+                    />
+                    <Image onClick={() => deleteProduct()} className={`hover:cursor-pointer hover:scale-105 ${theme === 'dark' ? 'filter invert' : ''}`} src={images.remove} height={30} width={30} />
+                  </div>
                 )
                 : (
                   <Button
