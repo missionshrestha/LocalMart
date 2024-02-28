@@ -21,7 +21,7 @@ for local Nepalese sellers to promote their products to national and worldwide m
 
 ```bash
 # Clone the repository
-$ git clone https://github.com/ashutoshbr/LocalMart
+$ git clone https://github.com/missionshrestha/LocalMart
 $ cd LocalMart/backend
 
 # Setup virtual environment
